@@ -1,0 +1,27 @@
+﻿@page "/entries"
+@using MudBlazor
+
+<PageTitle>Entries</PageTitle>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-6"><MudDatePicker PickerVariant="PickerVariant.Static" Orientation="Orientation.Landscape" @bind-Date="SelectedDate" ></MudDatePicker></div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-12">
+            @if (EntriesOnSelectedDate.Count > 0)
+            {
+                <ul>
+                    @foreach (var entry in EntriesOnSelectedDate)
+                    {
+                        <li>@entry.Timestamp.ToShortTimeString()</li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <div>No entries for that date</div>
+            }
+        </div>
+    </div>
+</div>
