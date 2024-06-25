@@ -4,4 +4,6 @@ public class Entry
 {
     public required Guid Id { get; set; }
     public required DateTime Timestamp { get; set; }
+
+    public int? Consistency { get; set; }
 }

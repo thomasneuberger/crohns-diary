@@ -1,4 +1,5 @@
 ﻿@page "/entries"
+@using CrohnsDiary.App.Models
 @using MudBlazor
 
 <PageTitle>Entries</PageTitle>
@@ -11,12 +12,12 @@
         <div class="col-12">
             @if (EntriesOnSelectedDate.Count > 0)
             {
-                <ul>
-                    @foreach (var entry in EntriesOnSelectedDate)
-                    {
-                        <li>@entry.Timestamp.ToShortTimeString()</li>
-                    }
-                </ul>
+                <MudDataGrid Items="@EntriesOnSelectedDate" Striped="true">
+                    <Columns>
+                        <PropertyColumn Property="e => e.Timestamp" Title="Time" Format="t"></PropertyColumn>
+                        <PropertyColumn Property="e => e.Consistency"></PropertyColumn>
+                    </Columns>
+                </MudDataGrid>
             }
             else
             {

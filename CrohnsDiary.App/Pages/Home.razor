@@ -9,6 +9,12 @@
         <div class="col-6"><MudTimePicker @bind-Time="SelectedTime"></MudTimePicker></div>
     </div>
     <div class="row mt-3">
+        <div class="col-12 col-sm-3"><label>Consistency</label></div>
+        <div class="col-12 col-sm-9">
+            <MudSlider T="int" Min="1" Max="5" @bind-Value="Consistency"></MudSlider>
+        </div>
+    </div>
+    <div class="row mt-3">
         <div class="col-12">
             <MudButton Color="Color.Primary" Variant="Variant.Filled" @onclick="OnSave">Save</MudButton>
         </div>
