@@ -79,7 +79,12 @@ jobs:
 
       - name: Azure CLI script
         uses: azure/cli@v2
+        env:
+          PULUMI_CONFIG_PASSPHRASE:  ${{ secrets.PULUMI_CONFIG_PASSPHRASE }}
         with:
           azcliversion: latest
           inlineScript: |
-            az account show
+            cd deploy
+            pulumi login azblob://stacks?storage_account=stnbgpulumi
+            pulumi stack select dev
+            pulumi up -y
