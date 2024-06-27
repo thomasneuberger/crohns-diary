@@ -21,6 +21,7 @@ return await Deployment.RunAsync(() =>
     // Create a resource group for the website.
     var resourceGroup = new AzureNative.Resources.ResourceGroup($"rg-crohns-diary-{stack}", new ResourceGroupArgs
     {
+        ResourceGroupName = $"rg-crohns-diary-{stack}",
         Location = "westeurope",
         Tags = tags
     });
@@ -28,6 +29,7 @@ return await Deployment.RunAsync(() =>
     // Create a blob storage account.
     var account = new AzureNative.Storage.StorageAccount($"stnbgcrohnd{stack}", new()
     {
+        AccountName = $"stnbgcrohnd{stack}",
         ResourceGroupName = resourceGroup.Name,
         Kind = "StorageV2",
         Sku = new AzureNative.Storage.Inputs.SkuArgs
@@ -58,6 +60,7 @@ return await Deployment.RunAsync(() =>
     // Create a CDN profile.
     var profile = new AzureNative.Cdn.Profile($"profile-nbg-crohns-diary-{stack}", new()
     {
+        ProfileName = $"profile-nbg-crohns-diary-{stack}",
         ResourceGroupName = resourceGroup.Name,
         Sku = new AzureNative.Cdn.Inputs.SkuArgs
         {
@@ -72,6 +75,7 @@ return await Deployment.RunAsync(() =>
     // Create a CDN endpoint to distribute and cache the website.
     var endpoint = new AzureNative.Cdn.Endpoint($"endpoint-nbg-crohns-diary-{stack}", new()
     {
+        EndpointName = $"endpoint-nbg-crohns-diary-{stack}",
         ResourceGroupName = resourceGroup.Name,
         ProfileName = profile.Name,
         IsHttpAllowed = false,
