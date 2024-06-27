@@ -12,14 +12,17 @@ return await Deployment.RunAsync(() =>
     var config = new Config();
     var path = config.Get("path") ?? "./www";
     var indexDocument = config.Get("indexDocument") ?? "index.html";
-    var errorDocument = config.Get("errorDocument") ?? "error.html";
+    var errorDocument = config.Get("errorDocument") ?? "index.html";
 
     var stack = Deployment.Instance.StackName;
+    var tags = new InputMap<string>();
+    tags.Add("Stack", stack);
 
     // Create a resource group for the website.
     var resourceGroup = new AzureNative.Resources.ResourceGroup($"rg-crohns-diary-{stack}", new ResourceGroupArgs
     {
-        Location = "westeurope"
+        Location = "westeurope",
+        Tags = tags
     });
 
     // Create a blob storage account.
@@ -31,6 +34,7 @@ return await Deployment.RunAsync(() =>
         {
             Name = "Standard_LRS",
         },
+        Tags = tags
     });
 
     // Configure the storage account as a website.
@@ -59,6 +63,7 @@ return await Deployment.RunAsync(() =>
         {
             Name = "Standard_Microsoft",
         },
+        Tags = tags
     });
 
     // Pull the hostname out of the storage-account endpoint.
@@ -91,6 +96,7 @@ return await Deployment.RunAsync(() =>
                 HostName = originHostname,
             },
         },
+        Tags = tags
     });
 
     // Export the URLs and hostnames of the storage account and CDN.
