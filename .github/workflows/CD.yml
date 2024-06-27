@@ -65,7 +65,7 @@ jobs:
       - name: Build
         run: dotnet build ./deploy/CrohnsDiary.Deploy.csproj -c Release --no-restore
 
-      - name: Doenload App
+      - name: Download App
         uses: actions/download-artifact@v4
         with:
           name: App
@@ -86,7 +86,7 @@ jobs:
           cloud-url: azblob://stacks?storage_account=stnbgpulumi
           stack-name: dev
           refresh: true
-          config-map: "{ path: { value: './app/wwwroot'} }"
+          config-map: "{ path: { value: '../app/wwwroot'} }"
         env:
           ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
           ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
@@ -115,7 +115,7 @@ jobs:
       - name: Build
         run: dotnet build ./deploy/CrohnsDiary.Deploy.csproj -c Release --no-restore
 
-      - name: Doenload App
+      - name: Download App
         uses: actions/download-artifact@v4
         with:
           name: App
@@ -136,7 +136,7 @@ jobs:
           cloud-url: azblob://stacks?storage_account=stnbgpulumi
           stack-name: prod
           refresh: true
-          config-map: "{ path: { value: './app/wwwroot'} }"
+          config-map: "{ path: { value: '../app/wwwroot'} }"
         env:
           ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
           ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
