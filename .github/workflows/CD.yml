@@ -26,15 +26,41 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build -c Release --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal
+
+    - name: Publish App
+      run: dotnet publish ./CrohnsDiary.App/CrohnsDiary.App.csproj --no-build -o ./CrohnsDiary.App/publish
+    - name: Publish App artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: App
+        path: ./CrohnsDiary.App/publish
+
+    - name: Publish Deployment
+      run: dotnet publish ./CrohnsDiary.Deploy/CrohnsDiary.Deploy.csproj --no-build -o ./CrohnsDiary.Deploy/publish
+    - name: Publish Deployment artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: Deployment
+        path: ./CrohnsDiary.Deploy/publish
   
   dev:
     runs-on: ubuntu-latest
     needs: build
     environment: development
     steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: App
+          path: ./app
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: Deployment
+          path: ./deployment
+  
       - name: OIDC Login to Azure Public Cloud with AzPowershell (enableAzPSSession true)
         uses: azure/login@v2
         with:
