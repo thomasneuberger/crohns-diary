@@ -1,0 +1,7 @@
+name: CrohnsDiary
+runtime: dotnet
+description: A diary for Crohn stuff
+config:
+  pulumi:tags:
+    value:
+      pulumi:template: static-website-azure-csharp
