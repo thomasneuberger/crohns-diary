@@ -55,7 +55,7 @@ internal class Cdn
             Tags = tags
         });
 
-        if (hostname is not null)
+        if (!string.IsNullOrWhiteSpace(hostname))
         {
             var customDomain = new Pulumi.Azure.Cdn.EndpointCustomDomain("customDomain", new()
             {
@@ -71,7 +71,7 @@ internal class Cdn
             });
         }
 
-        Url = hostname is not null ? Output<string>.Create(Task.FromResult(hostname)) : endpoint.HostName.Apply(endpointHostName => $"https://{endpointHostName}");
-        Hostname = endpoint.HostName;
+        Url = hostname is not null ? Output<string>.Create(Task.FromResult($"https://{hostname}")) : endpoint.HostName.Apply(endpointHostName => $"https://{endpointHostName}");
+        Hostname = hostname is not null ? Output<string>.Create(Task.FromResult(hostname)) : endpoint.HostName;
     }
 }
