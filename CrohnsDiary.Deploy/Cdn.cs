@@ -1,4 +1,5 @@
-﻿using Pulumi;
+﻿using System.Threading.Tasks;
+using Pulumi;
 using Pulumi.Azure.Cdn.Inputs;
 using AzureNative = Pulumi.AzureNative;
 
@@ -9,7 +10,7 @@ internal class Cdn
 
     public Output<string> Hostname { get; init; }
 
-    public Cdn(string stack, AzureNative.Resources.ResourceGroup resourceGroup, InputMap<string> tags, Input<string> originHostname, Input<string>? hostname)
+    public Cdn(string stack, AzureNative.Resources.ResourceGroup resourceGroup, InputMap<string> tags, Input<string> originHostname, string? hostname)
     {
         // Create a CDN profile.
         var profile = new AzureNative.Cdn.Profile($"profile-nbg-crohns-diary-{stack}", new()
@@ -54,11 +55,11 @@ internal class Cdn
             Tags = tags
         });
 
-        if (hostname?.ToString() is not null)
+        if (hostname is not null)
         {
             var customDomain = new Pulumi.Azure.Cdn.EndpointCustomDomain("customDomain", new()
             {
-                Name = hostname.ToString()!.Split('.')[0],
+                Name = hostname.Split('.')[0],
                 CdnEndpointId = endpoint.Id,
                 HostName = hostname,
                 CdnManagedHttps = new EndpointCustomDomainCdnManagedHttpsArgs
@@ -70,7 +71,7 @@ internal class Cdn
             });
         }
 
-        Url = hostname ?? endpoint.HostName.Apply(endpointHostName => $"https://{endpointHostName}");
+        Url = hostname is not null ? Output<string>.Create(Task.FromResult(hostname)) : endpoint.HostName.Apply(endpointHostName => $"https://{endpointHostName}");
         Hostname = endpoint.HostName;
     }
 }
