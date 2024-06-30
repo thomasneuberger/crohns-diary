@@ -86,7 +86,7 @@ jobs:
           cloud-url: azblob://stacks?storage_account=stnbgpulumi
           stack-name: dev
           refresh: true
-          config-map: "{ path: { value: '../app/wwwroot'}, hostname: { value: '$HOSTNAME'} }"
+          config-map: "{ path: { value: '../app/wwwroot'}, hostname: { value: '${{ vars.HOSTNAME }}'} }"
         env:
           ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
           ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
@@ -96,7 +96,6 @@ jobs:
           AZURE_STORAGE_ACCOUNT: ${{ secrets.AZURE_STORAGE_ACCOUNT }}
           AZURE_STORAGE_KEY: ${{ secrets.AZURE_STORAGE_KEY }}
           PULUMI_CONFIG_PASSPHRASE: ${{ secrets.PULUMI_CONFIG_PASSPHRASE }}
-          HOSTNAME: ${{ vars.HOSTNAME }}
 
   prod:
     runs-on: ubuntu-latest
