@@ -126,4 +126,7 @@
   <data name="Home" xml:space="preserve">
     <value>Home</value>
   </data>
+  <data name="Imprint" xml:space="preserve">
+    <value>Imprint</value>
+  </data>
 </root>
