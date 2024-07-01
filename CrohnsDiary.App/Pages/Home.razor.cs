@@ -1,6 +1,7 @@
 ﻿using CrohnsDiary.App.Database;
 using CrohnsDiary.App.Models;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Localization;
 using MudBlazor;
 
 namespace CrohnsDiary.App.Pages;
@@ -12,6 +13,9 @@ public partial class Home
 
     [Inject]
     public required EntryDatabase Database { get; set; }
+
+    [Inject]
+    public required IStringLocalizer<Home> Loc { get; set; }
 
     private DateTime? SelectedDate { get; set; } = DateTime.Now;
 
@@ -30,6 +34,6 @@ public partial class Home
             Consistency = Consistency
         };
         await Database.Entries.Add(entry, entry.Id);
-        Snackbar.Add("Saved.", Severity.Success);
+        Snackbar.Add(Loc["Saved"], Severity.Success);
     }
 }
