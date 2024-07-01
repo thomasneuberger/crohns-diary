@@ -1,4 +1,3 @@
-using System;
 using CrohnsDiary.Deploy;
 using Pulumi;
 using System.Collections.Generic;
@@ -10,6 +9,7 @@ return await Deployment.RunAsync(() =>
     // Import the program's configuration settings.
     var config = new Config();
     var hostname = config.Get("hostname")?.Trim();
+    var noHttps = config.Get("no-https") == "true";
 
     var stack = Deployment.Instance.StackName;
     var tags = new InputMap<string>();
@@ -25,7 +25,7 @@ return await Deployment.RunAsync(() =>
 
     var storage = new Storage(stack, config, resourceGroup, tags);
 
-    var cdn = new Cdn(stack, resourceGroup, tags, storage.Hostname, hostname);
+    var cdn = new Cdn(stack, resourceGroup, tags, storage.Hostname, hostname, noHttps);
 
     // Export the URLs and hostnames of the storage account and CDN.
     return new Dictionary<string, object?>

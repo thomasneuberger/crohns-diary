@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Pulumi;
+using Pulumi.Azure.Cdn;
 using Pulumi.Azure.Cdn.Inputs;
 using AzureNative = Pulumi.AzureNative;
 
@@ -10,7 +11,7 @@ internal class Cdn
 
     public Output<string> Hostname { get; init; }
 
-    public Cdn(string stack, AzureNative.Resources.ResourceGroup resourceGroup, InputMap<string> tags, Input<string> originHostname, string? hostname)
+    public Cdn(string stack, AzureNative.Resources.ResourceGroup resourceGroup, InputMap<string> tags, Input<string> originHostname, string? hostname, bool noHttps)
     {
         // Create a CDN profile.
         var profile = new AzureNative.Cdn.Profile($"profile-nbg-crohns-diary-{stack}", new()
@@ -57,18 +58,24 @@ internal class Cdn
 
         if (!string.IsNullOrWhiteSpace(hostname))
         {
-            var customDomain = new Pulumi.Azure.Cdn.EndpointCustomDomain("customDomain", new()
+            var customDomainArgs = new EndpointCustomDomainArgs
             {
                 Name = hostname.Split('.')[0],
                 CdnEndpointId = endpoint.Id,
-                HostName = hostname,
-                CdnManagedHttps = new EndpointCustomDomainCdnManagedHttpsArgs
+                HostName = hostname
+            };
+
+            if (!noHttps)
+            {
+                customDomainArgs.CdnManagedHttps = new EndpointCustomDomainCdnManagedHttpsArgs
                 {
-                    CertificateType= "Dedicated",
+                    CertificateType = "Dedicated",
                     ProtocolType = "ServerNameIndication",
                     TlsVersion = "TLS12"
-                }
-            });
+                };
+            }
+
+            _ = new EndpointCustomDomain("customDomain", customDomainArgs);
         }
 
         Url = hostname is not null ? Output<string>.Create(Task.FromResult($"https://{hostname}")) : endpoint.HostName.Apply(endpointHostName => $"https://{endpointHostName}");
