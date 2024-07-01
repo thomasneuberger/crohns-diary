@@ -86,7 +86,7 @@ jobs:
           cloud-url: ${{ secrets.PULUMI_STACK_URL }}
           stack-name: dev
           refresh: true
-          config-map: "{ path: { value: '../app/wwwroot'}, hostname: { value: '${{ vars.HOSTNAME }}'}, no-https: { value: '${{ vars.NO_HTTPS }}' }"
+          config-map: "{ path: { value: '../app/wwwroot'}, hostname: { value: '${{ vars.HOSTNAME }}'}, no-https: { value: '${{ vars.NO_HTTPS }}'} }"
         env:
           ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
           ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
@@ -136,7 +136,7 @@ jobs:
           cloud-url: ${{ secrets.PULUMI_STACK_URL }}
           stack-name: prod
           refresh: true
-          config-map: "{ path: { value: '../app/wwwroot'}, hostname: { value: '$HOSTNAME'}, no-https: { value: '${{ vars.NO_HTTPS }}' }"
+          config-map: "{ path: { value: '../app/wwwroot'}, hostname: { value: '${{ vars.HOSTNAME }}'}, no-https: { value: '${{ vars.NO_HTTPS }}'} }"
         env:
           ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
           ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
