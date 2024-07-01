@@ -5,7 +5,7 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CrohnsDiary.App", "CrohnsDiary.App\CrohnsDiary.App.csproj", "{77C2C262-F12B-4684-9EAD-7E4E13EBB472}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrohnsDiary.Deploy", "CrohnsDiary.Deploy\CrohnsDiary.Deploy.csproj", "{F0633F11-47A3-43A7-AE2F-A226B1B1FED0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CrohnsDiary.Deploy", "CrohnsDiary.Deploy\CrohnsDiary.Deploy.csproj", "{F0633F11-47A3-43A7-AE2F-A226B1B1FED0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
