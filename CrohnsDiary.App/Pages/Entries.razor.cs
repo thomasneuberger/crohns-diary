@@ -14,7 +14,7 @@ public partial class Entries
     private DateTime? EntriesListDate { get; set; }
     private IReadOnlyList<Entry> EntriesOnSelectedDate { get; set; } = [];
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         SelectedDate = DateTime.Now.Date;
     }
@@ -34,8 +34,6 @@ public partial class Entries
             .Where(nameof(Entry.Timestamp))
             .Between(selectedDate, selectedDate.AddDays(1))
             .ToList();
-
-        Console.WriteLine($"Entries found: {EntriesOnSelectedDate.Count}");
 
         EntriesListDate = selectedDate;
 
