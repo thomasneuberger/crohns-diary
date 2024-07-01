@@ -9,7 +9,7 @@ return await Deployment.RunAsync(() =>
 {
     // Import the program's configuration settings.
     var config = new Config();
-    var hostname = config.Get("hostname");
+    var hostname = config.Get("hostname")?.Trim();
 
     var stack = Deployment.Instance.StackName;
     var tags = new InputMap<string>();
