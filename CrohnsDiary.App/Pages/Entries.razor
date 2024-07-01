@@ -1,8 +1,6 @@
 ﻿@page "/entries"
-@using CrohnsDiary.App.Models
-@using MudBlazor
 
-<PageTitle>Entries</PageTitle>
+@inject IStringLocalizer<Entries> Loc
 
 <div class="container-fluid">
     <div class="row">
@@ -14,14 +12,14 @@
             {
                 <MudDataGrid Items="@EntriesOnSelectedDate" Striped="true">
                     <Columns>
-                        <PropertyColumn Property="e => e.Timestamp" Title="Time" Format="t"></PropertyColumn>
-                        <PropertyColumn Property="e => e.Consistency"></PropertyColumn>
+                        <PropertyColumn Property="e => e.Timestamp" Title="@Loc["Time"]" Format="t"></PropertyColumn>
+                        <PropertyColumn Property="e => e.Consistency" Title="@Loc["Consistency"]"></PropertyColumn>
                     </Columns>
                 </MudDataGrid>
             }
             else
             {
-                <div>No entries for that date</div>
+                <div>@Loc["NoEntries"]</div>
             }
         </div>
     </div>
