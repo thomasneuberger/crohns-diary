@@ -106,7 +106,7 @@ public partial class ExportImport
         var ids = entries.Select(e => e.Id).ToArray();
         await Database.Entries.BulkPut(entries);
 
-        Snackbar.Add("Imported", Severity.Success);
+        Snackbar.Add(Loc["Imported"], Severity.Success);
     }
 
     private async Task<string?> ReadImportDataFromArchive(IBrowserFile file)

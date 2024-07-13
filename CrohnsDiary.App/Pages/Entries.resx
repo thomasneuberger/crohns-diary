@@ -120,6 +120,9 @@
   <data name="Consistency" xml:space="preserve">
     <value>Consistency</value>
   </data>
+  <data name="ExportImport" xml:space="preserve">
+    <value>Export / Import</value>
+  </data>
   <data name="NoEntries" xml:space="preserve">
     <value>No entries for that date</value>
   </data>
