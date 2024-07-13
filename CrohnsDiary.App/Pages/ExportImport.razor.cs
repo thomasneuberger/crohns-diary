@@ -3,9 +3,12 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using CrohnsDiary.App.Database;
+using CrohnsDiary.App.Models;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.Extensions.Localization;
 using Microsoft.JSInterop;
+using MudBlazor;
 
 namespace CrohnsDiary.App.Pages;
 
@@ -22,6 +25,9 @@ public partial class ExportImport
     };
 
     [Inject]
+    public required ISnackbar Snackbar { get; set; }
+
+    [Inject]
     public required EntryDatabase Database { get; set; }
 
     [Inject]
@@ -29,6 +35,8 @@ public partial class ExportImport
 
     [Inject]
     public required IStringLocalizer<ExportImport> Loc { get; set; }
+
+    private IBrowserFile? FileToImport { get; set; }
 
     private async Task OnExport()
     {
@@ -59,5 +67,73 @@ public partial class ExportImport
         await entryWriter.WriteAsync(exportData);
 
         return archiveStream;
+    }
+
+    private async Task OnImport()
+    {
+        if (FileToImport is null)
+        {
+            Snackbar.Add(Loc["SelectFileFirst", Severity.Warning]);
+            return;
+        }
+
+        var json = await ReadImportDataFromArchive(FileToImport);
+
+        if (json is null)
+        {
+            return;
+        }
+
+        Entry[]? entries;
+        try
+        {
+            entries = JsonSerializer.Deserialize<Entry[]>(json, _serializerOptions);
+        }
+        catch (JsonException ex)
+        {
+            Snackbar.Add(Loc["ParsingError"], Severity.Error);
+            return;
+        }
+
+        if (entries != null)
+        {
+            await ImportEntries(entries);
+        }
+    }
+
+    private async Task ImportEntries(Entry[] entries)
+    {
+        var ids = entries.Select(e => e.Id).ToArray();
+        await Database.Entries.BulkPut(entries);
+
+        Snackbar.Add("Imported", Severity.Success);
+    }
+
+    private async Task<string?> ReadImportDataFromArchive(IBrowserFile file)
+    {
+        await using var archiveStream = new MemoryStream();
+        await using (var uploadedStream = file.OpenReadStream())
+        {
+            await uploadedStream.CopyToAsync(archiveStream);
+        }
+        archiveStream.Position = 0;
+
+        using var archive = new ZipArchive(archiveStream, ZipArchiveMode.Read, leaveOpen: false);
+        var entry = archive.GetEntry(FileNameJson);
+        if (entry is null)
+        {
+            Snackbar.Add(Loc["NoDataFound"], Severity.Error);
+            return null;
+        }
+
+        await using var entryStream = entry.Open();
+        using var reader = new StreamReader(entryStream);
+        var json = await reader.ReadToEndAsync();
+        return json;
+    }
+
+    private void ImportFileSelected(InputFileChangeEventArgs e)
+    {
+        FileToImport = e.File;
     }
 }
