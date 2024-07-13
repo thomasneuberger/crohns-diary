@@ -120,4 +120,19 @@
   <data name="Export" xml:space="preserve">
     <value>Export</value>
   </data>
+  <data name="Import" xml:space="preserve">
+    <value>Import</value>
+  </data>
+  <data name="Imported" xml:space="preserve">
+    <value>Imported successfully</value>
+  </data>
+  <data name="NoDataFound" xml:space="preserve">
+    <value>The data to import is invalid</value>
+  </data>
+  <data name="ParsingError" xml:space="preserve">
+    <value>The data to import is invalid</value>
+  </data>
+  <data name="SelectFileFirst" xml:space="preserve">
+    <value>First, select the file to import</value>
+  </data>
 </root>
