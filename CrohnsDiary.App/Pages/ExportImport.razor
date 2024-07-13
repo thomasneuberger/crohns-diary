@@ -15,4 +15,21 @@
             </MudCard>
         </div>
     </div>
+    <div class="row">
+        <div class="col-12">
+            <MudCard>
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.h6">@Loc["Import"]</MudText>
+                    </CardHeaderContent>
+                </MudCardHeader>
+                <MudCardContent>
+                    <InputFile name="FileToImport.File" class="form-control" OnChange="ImportFileSelected"></InputFile>
+                </MudCardContent>
+                <MudCardActions>
+                    <MudButton Color="Color.Primary" Variant="Variant.Filled" @onclick="OnImport">@Loc["Import"]</MudButton>
+                </MudCardActions>
+            </MudCard>
+        </div>
+    </div>
 </div>
