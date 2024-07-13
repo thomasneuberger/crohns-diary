@@ -117,8 +117,11 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="About" xml:space="preserve">
+    <value>Über</value>
+  </data>
   <data name="AppTitle" xml:space="preserve">
-    <value>Crohn's Tagebuch</value>
+    <value>Crohns Tagebuch</value>
   </data>
   <data name="DataProtection" xml:space="preserve">
     <value>Datenschutz</value>
