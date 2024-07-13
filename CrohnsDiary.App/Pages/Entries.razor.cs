@@ -9,6 +9,9 @@ public partial class Entries
     [Inject]
     public required EntryDatabase Database { get; set; }
 
+    [Inject]
+    public required NavigationManager Navigation { get; set; }
+
     private DateTime? SelectedDate { get; set; }
 
     private DateTime? EntriesListDate { get; set; }
@@ -38,5 +41,10 @@ public partial class Entries
         EntriesListDate = selectedDate;
 
         StateHasChanged();
+    }
+
+    private async Task NavigateToExportImport()
+    {
+        Navigation.NavigateTo("/export-import");
     }
 }

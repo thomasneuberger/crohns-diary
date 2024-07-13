@@ -1,0 +1,18 @@
+﻿@page "/export-import"
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <MudCard>
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.h6">@Loc["Export"]</MudText>
+                    </CardHeaderContent>
+                </MudCardHeader>
+                <MudCardActions>
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" @onclick="OnExport">@Loc["Export"]</MudButton>
+                </MudCardActions>
+            </MudCard>
+        </div>
+    </div>
+</div>
