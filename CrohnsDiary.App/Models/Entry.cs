@@ -8,4 +8,6 @@ public class Entry
     public int? Consistency { get; set; }
 
     public int? Amount { get; set; }
+
+    public int? Effort { get; set; }
 }
