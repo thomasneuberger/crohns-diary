@@ -6,4 +6,6 @@ public class Entry
     public required DateTime Timestamp { get; set; }
 
     public int? Consistency { get; set; }
+
+    public int? Amount { get; set; }
 }
