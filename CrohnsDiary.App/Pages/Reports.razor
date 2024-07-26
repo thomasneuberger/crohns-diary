@@ -1,0 +1,15 @@
+﻿@page "/reports"
+@using ScottPlot.Blazor
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <MudDateRangePicker PickerVariant="PickerVariant.Dialog" @bind-DateRange="Range"></MudDateRangePicker>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <BlazorPlot @ref="Plot"></BlazorPlot>
+        </div>
+    </div>
+</div>

@@ -135,4 +135,7 @@
   <data name="Imprint" xml:space="preserve">
     <value>Imprint</value>
   </data>
+  <data name="Reports" xml:space="preserve">
+    <value>Reports</value>
+  </data>
 </root>
