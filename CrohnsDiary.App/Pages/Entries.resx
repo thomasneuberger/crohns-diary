@@ -123,6 +123,9 @@
   <data name="Consistency" xml:space="preserve">
     <value>Consistency</value>
   </data>
+  <data name="Effort" xml:space="preserve">
+    <value>Effort</value>
+  </data>
   <data name="ExportImport" xml:space="preserve">
     <value>Export / Import</value>
   </data>

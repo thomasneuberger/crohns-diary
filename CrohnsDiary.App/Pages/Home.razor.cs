@@ -23,6 +23,8 @@ public partial class Home
 
     private int Amount { get; set; } = 3;
 
+    private int Effort { get; set; } = 3;
+
     private TimeSpan? SelectedTime { get; set; } = DateTime.Now.TimeOfDay;
 
     private async Task OnSave()
@@ -34,7 +36,8 @@ public partial class Home
             Id = Guid.NewGuid(),
             Timestamp = timestamp,
             Consistency = Consistency,
-            Amount = Amount
+            Amount = Amount,
+            Effort = Effort
         };
         await Database.Entries.Add(entry, entry.Id);
         Snackbar.Add(Loc["Saved"], Severity.Success);
