@@ -1,0 +1,14 @@
+﻿@page "/reports"
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <MudDateRangePicker PickerVariant="PickerVariant.Dialog" @bind-DateRange="Range"></MudDateRangePicker>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <MudChart ChartType="ChartType.Line" ChartSeries="Series" XAxisLabels="DayLabels" ChartOptions="Options" CanHideSeries Width="100%" Height="350px"></MudChart>
+        </div>
+    </div>
+</div>
