@@ -1,4 +1,7 @@
 ﻿@page "/"
+@using CrohnsDiary.App.Models
+
+@inject IStringLocalizer<Entry> LocEntry
 
 <div class="container-fluid">
     <div class="row">
@@ -6,19 +9,19 @@
         <div class="col-6"><MudTimePicker @bind-Time="SelectedTime" AnchorOrigin="Origin.TopRight"></MudTimePicker></div>
     </div>
     <div class="row mt-3">
-        <div class="col-12 col-sm-3"><label>@Loc["Consistency"]</label></div>
+        <div class="col-12 col-sm-3"><label>@LocEntry["Consistency"]</label></div>
         <div class="col-12 col-sm-9">
             <MudSlider T="int" Min="1" Max="5" @bind-Value="Consistency"></MudSlider>
         </div>
     </div>
     <div class="row mt-3">
-        <div class="col-12 col-sm-3"><label>@Loc["Amount"]</label></div>
+        <div class="col-12 col-sm-3"><label>@LocEntry["Amount"]</label></div>
         <div class="col-12 col-sm-9">
             <MudSlider T="int" Min="1" Max="5" @bind-Value="Amount"></MudSlider>
         </div>
     </div>
     <div class="row mt-3">
-        <div class="col-12 col-sm-3"><label>@Loc["Effort"]</label></div>
+        <div class="col-12 col-sm-3"><label>@LocEntry["Effort"]</label></div>
         <div class="col-12 col-sm-9">
             <MudSlider T="int" Min="1" Max="5" @bind-Value="Effort"></MudSlider>
         </div>

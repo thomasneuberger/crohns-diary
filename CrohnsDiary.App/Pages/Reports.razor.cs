@@ -87,6 +87,6 @@ public partial class Reports
                     .Select(e => (double)e.Amount!.Value)
                     .Sum())
             .ToArray();
-        Series.Add(new ChartSeries{Name = Loc["Amount"], Data = amounts});
+        Series.Add(new ChartSeries{Name = Loc["TotalAmount"], Data = amounts});
     }
 }

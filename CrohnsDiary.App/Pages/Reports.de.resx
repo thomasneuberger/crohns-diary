@@ -117,13 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Amount" xml:space="preserve">
-    <value>Menge</value>
-  </data>
   <data name="AverageConsistency" xml:space="preserve">
     <value>Durchschnittliche Konsistenz</value>
   </data>
   <data name="Count" xml:space="preserve">
     <value>Anzahl</value>
+  </data>
+  <data name="TotalAmount" xml:space="preserve">
+    <value>Menge</value>
   </data>
 </root>

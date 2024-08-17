@@ -1,6 +1,8 @@
 ﻿@page "/entries"
+@using CrohnsDiary.App.Models
 
 @inject IStringLocalizer<Entries> Loc
+@inject IStringLocalizer<Entry> LocEntry
 
 <div class="container-fluid">
     <div class="row">
@@ -13,9 +15,9 @@
                 <MudDataGrid Items="@EntriesOnSelectedDate" Striped="true">
                     <Columns>
                         <PropertyColumn Property="e => e.Timestamp" Title="@Loc["Time"]" Format="t"></PropertyColumn>
-                        <PropertyColumn Property="e => e.Consistency" Title="@Loc["Consistency"]"></PropertyColumn>
-                        <PropertyColumn Property="e => e.Amount" Title="@Loc["Amount"]"></PropertyColumn>
-                        <PropertyColumn Property="e => e.Effort" Title="@Loc["Effort"]"></PropertyColumn>
+                        <PropertyColumn Property="e => e.Consistency" Title="@LocEntry["Consistency"]"></PropertyColumn>
+                        <PropertyColumn Property="e => e.Amount" Title="@LocEntry["Amount"]"></PropertyColumn>
+                        <PropertyColumn Property="e => e.Effort" Title="@LocEntry["Effort"]"></PropertyColumn>
                     </Columns>
                 </MudDataGrid>
             }
