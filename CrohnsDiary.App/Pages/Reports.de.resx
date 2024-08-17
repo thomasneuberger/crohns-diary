@@ -120,6 +120,9 @@
   <data name="AverageConsistency" xml:space="preserve">
     <value>Durchschnittliche Konsistenz</value>
   </data>
+  <data name="AverageUrgency" xml:space="preserve">
+    <value>Durchschnittliche Dringlichkeit</value>
+  </data>
   <data name="Count" xml:space="preserve">
     <value>Anzahl</value>
   </data>
