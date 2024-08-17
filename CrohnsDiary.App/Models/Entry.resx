@@ -126,4 +126,7 @@
   <data name="Effort" xml:space="preserve">
     <value>Effort</value>
   </data>
+  <data name="Urgency" xml:space="preserve">
+    <value>Urgency</value>
+  </data>
 </root>

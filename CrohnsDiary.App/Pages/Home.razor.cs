@@ -25,6 +25,8 @@ public partial class Home
 
     private int Effort { get; set; } = 3;
 
+    public int Urgency { get; set; } = 3;
+
     private TimeSpan? SelectedTime { get; set; } = DateTime.Now.TimeOfDay;
 
     private async Task OnSave()
@@ -37,7 +39,8 @@ public partial class Home
             Timestamp = timestamp,
             Consistency = Consistency,
             Amount = Amount,
-            Effort = Effort
+            Effort = Effort,
+            Urgency = Urgency
         };
         await Database.Entries.Add(entry, entry.Id);
         Snackbar.Add(Loc["Saved"], Severity.Success);

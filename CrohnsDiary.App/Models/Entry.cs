@@ -10,4 +10,6 @@ public class Entry
     public int? Amount { get; set; }
 
     public int? Effort { get; set; }
+
+    public int? Urgency { get; set; }
 }
