@@ -11,4 +11,16 @@
             <MudChart ChartType="ChartType.Line" ChartSeries="Series" XAxisLabels="DayLabels" ChartOptions="Options" CanHideSeries Width="100%" Height="350px"></MudChart>
         </div>
     </div>
+    <div class="row">
+        <div class="col-12">
+            <MudDataGrid T="DailyReport" Items="dailyReports" Striped="true">
+                <Columns>
+                    <PropertyColumn Property="d => d.Day"></PropertyColumn>
+                    <PropertyColumn Property="d => d.Count" Title="@Loc["Count"]"></PropertyColumn>
+                    <PropertyColumn Property="d => d.AverageConsistency" Title="@Loc["AverageConsistency"]"></PropertyColumn>
+                    <PropertyColumn Property="d => d.AverageUrgency" Title="@Loc["AverageUrgency"]"></PropertyColumn>
+                </Columns>
+            </MudDataGrid>
+        </div>
+    </div>
 </div>

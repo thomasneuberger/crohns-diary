@@ -25,6 +25,8 @@ public partial class Reports
     private string[] DayLabels { get; set; } = [];
     private List<ChartSeries> Series { get; } = new();
 
+    private IReadOnlyList<DailyReport> dailyReports = [];
+
     private (DateOnly From, DateOnly To)? _loadedDateRange;
 
     protected override async Task OnInitializedAsync()
@@ -90,5 +92,26 @@ public partial class Reports
                     .Average())
             .ToArray();
         Series.Add(new ChartSeries{Name = Loc["AverageUrgency"], Data = urgencies});
+
+        dailyReports = dailyEntries
+            .Select((d, index) => new DailyReport(d.Day)
+            {
+                Count = entryCounts[index],
+                AverageConsistency = Math.Round(consistencies[index], 1),
+                AverageUrgency = Math.Round(urgencies[index], 1)
+            })
+            .OrderBy(d => d.Day)
+            .ToArray();
+    }
+
+    public struct DailyReport(DateOnly day)
+    {
+        public DateOnly Day { get; } = day;
+
+        public double? Count { get; set; }
+
+        public double? AverageConsistency { get; set; }
+
+        public double? AverageUrgency { get; set; }
     }
 }
