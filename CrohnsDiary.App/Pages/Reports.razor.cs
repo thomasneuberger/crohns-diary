@@ -18,7 +18,9 @@ public partial class Reports
 
     private ChartOptions Options { get; } = new ChartOptions
     {
-        YAxisTicks = 1
+        YAxisTicks = 1,
+        YAxisRequireZeroPoint = true,
+        YAxisLines = true
     };
     private string[] DayLabels { get; set; } = [];
     private List<ChartSeries> Series { get; } = new();
@@ -80,21 +82,12 @@ public partial class Reports
             .ToArray();
         Series.Add(new ChartSeries{Name = Loc["AverageConsistency"], Data = consistencies});
 
-        var amounts = dailyEntries
-            .Select(d =>
-                d.Entries
-                    .Where(e => e.Amount.HasValue)
-                    .Select(e => (double)e.Amount!.Value)
-                    .Sum())
-            .ToArray();
-        Series.Add(new ChartSeries{Name = Loc["TotalAmount"], Data = amounts});
-
         var urgencies = dailyEntries
             .Select(d =>
                 d.Entries
                     .Where(e => e.Urgency.HasValue)
                     .Select(e => (double)e.Urgency!.Value)
-                    .Sum())
+                    .Average())
             .ToArray();
         Series.Add(new ChartSeries{Name = Loc["AverageUrgency"], Data = urgencies});
     }
