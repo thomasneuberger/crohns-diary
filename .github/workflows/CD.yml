@@ -39,29 +39,26 @@ jobs:
       run: |
         Set-Content -Path ./CrohnsDiary.App/wwwroot/Imprint.md -Value "$env:content"
 
-    # - name: Modify Imprint.md
-    #   uses: jaywcjlove/github-action-modify-file-content@main
-    #   with:
-    #     path: ./CrohnsDiary.App/wwwroot/Imprint.md
-    #     body: "${{ vars.IMPRINT }}"
+    - name: Modify Imprint.de.md
+      shell: pwsh
+      env:
+        content: ${{ vars.IMPRINT_DE }}
+      run: |
+        Set-Content -Path ./CrohnsDiary.App/wwwroot/Imprint.de.md -Value "$env:content"
 
-    # - name: Modify Imprint.de.md
-    #   uses: jaywcjlove/github-action-modify-file-content@main
-    #   with:
-    #     path: ./CrohnsDiary.App/wwwroot/Imprint.de.md
-    #     body: "${{ vars.IMPRINT_DE }}"
+    - name: Modify Dataprotection.md
+      shell: pwsh
+      env:
+        content: ${{ vars.DATA_PROTECTION }}
+      run: |
+        Set-Content -Path ./CrohnsDiary.App/wwwroot/Dataprotection.md -Value "$env:content"
 
-    # - name: Modify Dataprotection.md
-    #   uses: jaywcjlove/github-action-modify-file-content@main
-    #   with:
-    #     path: ./CrohnsDiary.App/wwwroot/Dataprotection.md
-    #     body: "${{ vars.DATA_PROTECTION }}"
-
-    # - name: Modify Dataprotection.de.md
-    #   uses: jaywcjlove/github-action-modify-file-content@main
-    #   with:
-    #     path: ./CrohnsDiary.App/wwwroot/Dataprotection.de.md
-    #     body: "${{ vars.DATA_PROTECTION_DE }}"
+    - name: Modify Dataprotection.de.md
+      shell: pwsh
+      env:
+        content: ${{ vars.DATA_PROTECTION_DE }}
+      run: |
+        Set-Content -Path ./CrohnsDiary.App/wwwroot/Dataprotection.de.md -Value "$env:content"
 
     - name: Restore dependencies
       run: dotnet restore
