@@ -144,7 +144,7 @@ jobs:
             az cdn endpoint purge -g $RESOURCE_GROUP -n $ENDPOINT_NAME --profile-name $PROFILE_NAME --content-paths '*'
         env:
           RESOURCE_GROUP: ${{ steps.deploy_dev.outputs.RESOURCE_GROUP_NAME }}
-          ENDPOINT_NAME: ${{ steps.deply_dev.outputs.ENDPOINT_NAME }}
+          ENDPOINT_NAME: ${{ steps.deploy_dev.outputs.ENDPOINT_NAME }}
           PROFILE_NAME: ${{ steps.deploy_dev.outputs.PROFILE_NAME }}
 
   prod:
