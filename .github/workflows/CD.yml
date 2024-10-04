@@ -134,7 +134,7 @@ jobs:
             echo "Purge CDN cache in resource group $RESOURCE_GROUP..."
             echo "Endpoint: $ENDPOINT_NAME"
             echo "Profile: $PROFILE_NAME"
-            az cdn endpoint purge -g $RESOURCE_GROUP -n $ENDPOINT_NAME --profile-name $PROFILE_NAME --content-paths '/*'
+            az cdn endpoint purge -g $RESOURCE_GROUP -n $ENDPOINT_NAME --profile-name $PROFILE_NAME --no-wait --content-paths '/*'
         env:
           RESOURCE_GROUP: ${{ steps.deploy_dev.outputs.RESOURCE_GROUP_NAME }}
           ENDPOINT_NAME: ${{ steps.deploy_dev.outputs.ENDPOINT_NAME }}
@@ -199,7 +199,7 @@ jobs:
             echo "Purge CDN cache in resource group $RESOURCE_GROUP..."
             echo "Endpoint: $ENDPOINT_NAME"
             echo "Profile: $PROFILE_NAME"
-            az cdn endpoint purge -g $RESOURCE_GROUP -n $ENDPOINT_NAME --profile-name $PROFILE_NAME --content-paths '/*'
+            az cdn endpoint purge -g $RESOURCE_GROUP -n $ENDPOINT_NAME --profile-name $PROFILE_NAME --no-wait --content-paths '/*'
         env:
           RESOURCE_GROUP: ${{ steps.deploy_prod.outputs.RESOURCE_GROUP_NAME }}
           ENDPOINT_NAME: ${{ steps.deploy_prod.outputs.ENDPOINT_NAME }}
