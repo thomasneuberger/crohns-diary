@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Threading.Tasks;
 using Pulumi;
 using Pulumi.AzureNative.Resources;
 using AzureNative = Pulumi.AzureNative;
 using Deployment = Pulumi.Deployment;
 using SyncedFolder = Pulumi.SyncedFolder;
 
-return await Deployment.RunAsync(() =>
+return await Deployment.RunAsync(async () =>
 {
     // Import the program's configuration settings.
     var config = new Config();
@@ -18,10 +20,12 @@ return await Deployment.RunAsync(() =>
     var tags = new InputMap<string>();
     tags.Add("Stack", stack);
 
+    var resourceGroupName = $"rg-crohns-diary-{stack}";
+
     // Create a resource group for the website.
     var resourceGroup = new AzureNative.Resources.ResourceGroup($"rg-crohns-diary-{stack}", new ResourceGroupArgs
     {
-        ResourceGroupName = $"rg-crohns-diary-{stack}",
+        ResourceGroupName = resourceGroupName,
         Location = "westeurope",
         Tags = tags
     });
@@ -57,10 +61,12 @@ return await Deployment.RunAsync(() =>
         ContainerName = website.ContainerName,
     });
 
+    var profileName = $"profile-nbg-crohns-diary-{stack}";
+
     // Create a CDN profile.
     var profile = new AzureNative.Cdn.Profile($"profile-nbg-crohns-diary-{stack}", new()
     {
-        ProfileName = $"profile-nbg-crohns-diary-{stack}",
+        ProfileName = profileName,
         ResourceGroupName = resourceGroup.Name,
         Sku = new AzureNative.Cdn.Inputs.SkuArgs
         {
@@ -72,10 +78,12 @@ return await Deployment.RunAsync(() =>
     // Pull the hostname out of the storage-account endpoint.
     var originHostname = account.PrimaryEndpoints.Apply(endpoints => new Uri(endpoints.Web).Host);
 
+    var endpointName = $"endpoint-nbg-crohns-diary-{stack}";
+
     // Create a CDN endpoint to distribute and cache the website.
     var endpoint = new AzureNative.Cdn.Endpoint($"endpoint-nbg-crohns-diary-{stack}", new()
     {
-        EndpointName = $"endpoint-nbg-crohns-diary-{stack}",
+        EndpointName = endpointName,
         ResourceGroupName = resourceGroup.Name,
         ProfileName = profile.Name,
         IsHttpAllowed = false,
@@ -103,6 +111,10 @@ return await Deployment.RunAsync(() =>
         Tags = tags
     });
 
+    await WriteOutputVariable("RESOURCE_GROUP_NAME", resourceGroupName);
+    await WriteOutputVariable("ENDPOINT_NAME", endpointName);
+    await WriteOutputVariable("PROFILE_NAME", profileName);
+
     // Export the URLs and hostnames of the storage account and CDN.
     return new Dictionary<string, object?>
     {
@@ -112,3 +124,12 @@ return await Deployment.RunAsync(() =>
         ["cdnHostname"] = endpoint.HostName,
     };
 });
+
+async Task WriteOutputVariable(string name, string value)
+{
+    var path = Environment.GetEnvironmentVariable("GITHUB_OUTPUT");
+    if (File.Exists(path))
+    {
+        await File.AppendAllLinesAsync(path, [$"{name}={value}"]);
+    }
+}
