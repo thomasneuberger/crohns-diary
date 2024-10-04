@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Threading.Tasks;
 using Pulumi;
 using Pulumi.AzureNative.Resources;
 using AzureNative = Pulumi.AzureNative;
 using Deployment = Pulumi.Deployment;
 using SyncedFolder = Pulumi.SyncedFolder;
 
-return await Deployment.RunAsync(() =>
+return await Deployment.RunAsync(async () =>
 {
     // Import the program's configuration settings.
     var config = new Config();
@@ -103,6 +105,10 @@ return await Deployment.RunAsync(() =>
         Tags = tags
     });
 
+    await WriteOutputVariable("RESOURCE_GROUP_NAME", resourceGroup.Name.ToString());
+    await WriteOutputVariable("ENDPOINT_NAME", endpoint.Name.ToString());
+    await WriteOutputVariable("PROFILE_NAME", profile.Name.ToString());
+
     // Export the URLs and hostnames of the storage account and CDN.
     return new Dictionary<string, object?>
     {
@@ -112,3 +118,12 @@ return await Deployment.RunAsync(() =>
         ["cdnHostname"] = endpoint.HostName,
     };
 });
+
+async Task WriteOutputVariable(string name, string value)
+{
+    var path = Environment.GetEnvironmentVariable("GITHUB_OUTPUT");
+    if (File.Exists(path))
+    {
+        await File.AppendAllLinesAsync(path, [$"{name}={value}"]);
+    }
+}
