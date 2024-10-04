@@ -138,6 +138,9 @@ jobs:
         with:
           azcliversion: latest
           inlineScript: |
+            echo "Purge CDN cache in resource group $RESOURCE_GROUP..."
+            echo "Endpoint: $ENDPOINT_NAME"
+            echo "Profile: $PROFILE_NAME"
             az cdn endpoint purge -g $RESOURCE_GROUP -n $ENDPOINT_NAME --profile-name $PROFILE_NAME --content-paths '*'
         env:
           RESOURCE_GROUP: ${{ steps.deploy_dev.outputs.RESOURCE_GROUP_NAME }}
