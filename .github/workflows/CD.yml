@@ -134,9 +134,11 @@ jobs:
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: Purge CDN cache
-        shell: pwsh
-        run: |
-          az cdn endpoint purge -g $env:RESOURCE_GROUP -n $env:ENDPOINT_NAME --profile-name $env:PROFILE_NAME --content-paths '*'
+        uses: azure/cli@v2
+        with:
+          azcliversion: latest
+          inlineScript: |
+            az cdn endpoint purge -g $RESOURCE_GROUP -n $ENDPOINT_NAME --profile-name $PROFILE_NAME --content-paths '*'
         env:
           RESOURCE_GROUP: ${{ steps.deploy_dev.outputs.RESOURCE_GROUP_NAME }}
           ENDPOINT_NAME: ${{ steps.deply_dev.outputs.ENDPOINT_NAME }}
