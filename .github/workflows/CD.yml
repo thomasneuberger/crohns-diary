@@ -100,7 +100,7 @@ jobs:
           path: ./app
 
       - name: Deploy Azure Resources
-        uses: pulumi/actions@v3
+        uses: pulumi/actions@v6
         id: deploy_dev
         with:
           command: up
@@ -164,7 +164,7 @@ jobs:
           path: ./app
 
       - name: Deploy Azure Resources
-        uses: pulumi/actions@v3
+        uses: pulumi/actions@v6
         id: deploy_prod
         with:
           command: up

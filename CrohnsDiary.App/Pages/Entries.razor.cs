@@ -43,8 +43,10 @@ public partial class Entries
         StateHasChanged();
     }
 
-    private async Task NavigateToExportImport()
+    private Task NavigateToExportImport()
     {
         Navigation.NavigateTo("/export-import");
+
+        return Task.CompletedTask;
     }
 }

@@ -89,7 +89,7 @@ public partial class ExportImport
         {
             entries = JsonSerializer.Deserialize<Entry[]>(json, _serializerOptions);
         }
-        catch (JsonException ex)
+        catch (JsonException)
         {
             Snackbar.Add(Loc["ParsingError"], Severity.Error);
             return;
