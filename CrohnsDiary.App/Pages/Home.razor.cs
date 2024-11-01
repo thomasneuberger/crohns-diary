@@ -24,6 +24,8 @@ public partial class Home
 
     private bool ShowConsistency { get; set; }
 
+    private bool ShowAmount { get; set; }
+
     private int Consistency { get; set; } = 3;
 
     private int Amount { get; set; } = 3;
@@ -36,7 +38,8 @@ public partial class Home
 
     protected override async Task OnInitializedAsync()
     {
-        ShowConsistency = await SettingsDatabase.GetValue(ISettingsDatabase.ShowConsistency, true);
+        ShowConsistency = await SettingsDatabase.GetBoolValue(ISettingsDatabase.ShowConsistency, true);
+        ShowAmount = await SettingsDatabase.GetBoolValue(ISettingsDatabase.ShowAmount, true);
     }
 
     private async Task OnSave()

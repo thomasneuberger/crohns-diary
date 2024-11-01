@@ -7,7 +7,12 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
-            <MudSwitch @bind-Value="ShowConsistency" Color="Color.Primary" @onchange="OnShowConsistencyChanged">@Loc["ShowConsistency"]</MudSwitch>
+            <MudSwitch @bind-Value="ShowConsistency" Color="Color.Primary">@Loc["ShowConsistency"]</MudSwitch>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <MudSwitch @bind-Value="ShowAmount" Color="Color.Primary">@Loc["ShowAmount"]</MudSwitch>
         </div>
     </div>
 </div>

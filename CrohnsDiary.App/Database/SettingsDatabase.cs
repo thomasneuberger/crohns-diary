@@ -9,8 +9,9 @@ public class SettingsDatabase(ILocalStorageService localStorageService) : ISetti
         await localStorageService.SetItemAsync(key, value);
     }
 
-    public async Task<T> GetValue<T>(string key, T defaultValue)
+    public async Task<bool> GetBoolValue(string key, bool defaultValue)
     {
-        return await localStorageService.GetItemAsync<T>(key) ?? defaultValue;
+        var value = await localStorageService.GetItemAsync<bool?>(key);
+        return value ?? defaultValue;
     }
 }

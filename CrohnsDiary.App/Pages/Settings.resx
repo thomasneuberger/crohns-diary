@@ -120,4 +120,7 @@
   <data name="ShowConsistency" xml:space="preserve">
     <value>Show consistency</value>
   </data>
+  <data name="ShowAmount" xml:space="preserve">
+    <value>Show amount</value>
+  </data>
 </root>

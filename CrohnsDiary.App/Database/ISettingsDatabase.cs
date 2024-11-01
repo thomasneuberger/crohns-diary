@@ -4,6 +4,8 @@ public interface ISettingsDatabase
 {
     public const string ShowConsistency = nameof(ShowConsistency);
 
+    public const string ShowAmount = nameof(ShowAmount);
+
     Task SaveValue<T>(string key, T value);
-    Task<T> GetValue<T>(string key, T defaultValue);
+    Task<bool> GetBoolValue(string key, bool defaultValue);
 }

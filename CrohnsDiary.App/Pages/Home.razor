@@ -17,12 +17,15 @@
             </div>
         </div>
     }
-    <div class="row mt-3">
-        <div class="col-12 col-sm-3"><label>@LocEntry["Amount"]</label></div>
-        <div class="col-12 col-sm-9">
-            <MudSlider T="int" Min="1" Max="5" @bind-Value="Amount"></MudSlider>
+    @if (ShowAmount)
+    {
+        <div class="row mt-3">
+            <div class="col-12 col-sm-3"><label>@LocEntry["Amount"]</label></div>
+            <div class="col-12 col-sm-9">
+                <MudSlider T="int" Min="1" Max="5" @bind-Value="Amount"></MudSlider>
+            </div>
         </div>
-    </div>
+    }
     <div class="row mt-3">
         <div class="col-12 col-sm-3"><label>@LocEntry["Effort"]</label></div>
         <div class="col-12 col-sm-9">

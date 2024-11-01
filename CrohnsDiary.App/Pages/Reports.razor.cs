@@ -18,6 +18,7 @@ public partial class Reports
     public required IStringLocalizer<Reports> Loc { get; set; }
 
     private bool _showConsistency;
+    private bool _showAmount;
 
     public DateRange Range { get; set; } = new(DateTime.Today.AddMonths(-1), DateTime.Today);
 
@@ -36,7 +37,8 @@ public partial class Reports
 
     protected override async Task OnInitializedAsync()
     {
-        _showConsistency = await SettingsDatabase.GetValue(ISettingsDatabase.ShowConsistency, true);
+        _showConsistency = await SettingsDatabase.GetBoolValue(ISettingsDatabase.ShowConsistency, true);
+        _showAmount = await SettingsDatabase.GetBoolValue(ISettingsDatabase.ShowAmount, true);
         await FillChart();
     }
 
