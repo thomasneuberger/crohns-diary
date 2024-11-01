@@ -123,4 +123,8 @@
   <data name="ShowAmount" xml:space="preserve">
     <value>Show amount</value>
   </data>
+  <data name="ShowUrgency" xml:space="preserve">
+    <value>Show urgency
+</value>
+  </data>
 </root>
