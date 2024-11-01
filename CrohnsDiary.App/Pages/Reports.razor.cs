@@ -12,7 +12,13 @@ public partial class Reports
     public required EntryDatabase Database { get; set; }
 
     [Inject]
+    public required ISettingsDatabase SettingsDatabase { get; set; }
+
+    [Inject]
     public required IStringLocalizer<Reports> Loc { get; set; }
+
+    private bool _showConsistency;
+    private bool _showUrgency;
 
     public DateRange Range { get; set; } = new(DateTime.Today.AddMonths(-1), DateTime.Today);
 
@@ -31,6 +37,8 @@ public partial class Reports
 
     protected override async Task OnInitializedAsync()
     {
+        _showConsistency = await SettingsDatabase.GetBoolValue(ISettingsDatabase.ShowConsistency, true);
+        _showUrgency = await SettingsDatabase.GetBoolValue(ISettingsDatabase.ShowUrgency, true);
         await FillChart();
     }
 
@@ -82,7 +90,10 @@ public partial class Reports
                     .Select(e => (double)e.Consistency!.Value)
                     .Average())
             .ToArray();
-        Series.Add(new ChartSeries{Name = Loc["AverageConsistency"], Data = consistencies});
+        if (_showConsistency)
+        {
+            Series.Add(new ChartSeries { Name = Loc["AverageConsistency"], Data = consistencies });
+        }
 
         var urgencies = dailyEntries
             .Select(d =>
@@ -91,7 +102,10 @@ public partial class Reports
                     .Select(e => (double)e.Urgency!.Value)
                     .Average())
             .ToArray();
-        Series.Add(new ChartSeries{Name = Loc["AverageUrgency"], Data = urgencies});
+        if (_showUrgency)
+        {
+            Series.Add(new ChartSeries { Name = Loc["AverageUrgency"], Data = urgencies });
+        }
 
         dailyReports = dailyEntries
             .Select((d, index) => new DailyReport(d.Day)

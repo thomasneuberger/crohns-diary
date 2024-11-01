@@ -117,28 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="About" xml:space="preserve">
-    <value>Über</value>
+  <data name="ShowConsistency" xml:space="preserve">
+    <value>Konsistenz anzeigen</value>
   </data>
-  <data name="AppTitle" xml:space="preserve">
-    <value>Crohns Tagebuch</value>
+  <data name="ShowAmount" xml:space="preserve">
+    <value>Menge anzeigen</value>
   </data>
-  <data name="DataProtection" xml:space="preserve">
-    <value>Datenschutz</value>
+  <data name="ShowUrgency" xml:space="preserve">
+    <value>Dringlichkeit anzeigen</value>
   </data>
-  <data name="Entries" xml:space="preserve">
-    <value>Einträge</value>
-  </data>
-  <data name="Home" xml:space="preserve">
-    <value>Start</value>
-  </data>
-  <data name="Imprint" xml:space="preserve">
-    <value>Impressum</value>
-  </data>
-  <data name="Reports" xml:space="preserve">
-    <value>Auswertung</value>
-  </data>
-  <data name="Settings" xml:space="preserve">
-    <value>Einstellungen</value>
+  <data name="ShowEffort" xml:space="preserve">
+    <value>Anstrengung anzeigen</value>
   </data>
 </root>

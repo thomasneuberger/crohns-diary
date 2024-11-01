@@ -1,0 +1,28 @@
+﻿@page "/settings"
+
+@inject IStringLocalizer<NavMenu> LocNav
+
+<h1>@LocNav["Settings"]</h1>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <MudSwitch @bind-Value="ShowConsistency" Color="Color.Primary">@Loc["ShowConsistency"]</MudSwitch>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <MudSwitch @bind-Value="ShowAmount" Color="Color.Primary">@Loc["ShowAmount"]</MudSwitch>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <MudSwitch @bind-Value="ShowEffort" Color="Color.Primary">@Loc["ShowEffort"]</MudSwitch>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <MudSwitch @bind-Value="ShowUrgency" Color="Color.Primary">@Loc["ShowUrgency"]</MudSwitch>
+        </div>
+    </div>
+</div>

@@ -15,9 +15,20 @@ public partial class Home
     public required EntryDatabase Database { get; set; }
 
     [Inject]
+    public required ISettingsDatabase SettingsDatabase { get; set; }
+
+    [Inject]
     public required IStringLocalizer<Home> Loc { get; set; }
 
     private DateTime? SelectedDate { get; set; } = DateTime.Now;
+
+    private bool ShowConsistency { get; set; }
+
+    private bool ShowAmount { get; set; }
+
+    private bool ShowEffort { get; set; }
+
+    private bool ShowUrgency { get; set; }
 
     private int Consistency { get; set; } = 3;
 
@@ -28,6 +39,14 @@ public partial class Home
     public int Urgency { get; set; } = 3;
 
     private TimeSpan? SelectedTime { get; set; } = DateTime.Now.TimeOfDay;
+
+    protected override async Task OnInitializedAsync()
+    {
+        ShowConsistency = await SettingsDatabase.GetBoolValue(ISettingsDatabase.ShowConsistency, true);
+        ShowAmount = await SettingsDatabase.GetBoolValue(ISettingsDatabase.ShowAmount, true);
+        ShowEffort = await SettingsDatabase.GetBoolValue(ISettingsDatabase.ShowEffort, true);
+        ShowUrgency = await SettingsDatabase.GetBoolValue(ISettingsDatabase.ShowUrgency, true);
+    }
 
     private async Task OnSave()
     {
