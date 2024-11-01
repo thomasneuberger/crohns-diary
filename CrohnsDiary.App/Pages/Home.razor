@@ -8,12 +8,15 @@
         <div class="col-6"><MudDatePicker @bind-Date="SelectedDate" AnchorOrigin="Origin.TopLeft"></MudDatePicker></div>
         <div class="col-6"><MudTimePicker @bind-Time="SelectedTime" AnchorOrigin="Origin.TopRight"></MudTimePicker></div>
     </div>
-    <div class="row mt-3">
-        <div class="col-12 col-sm-3"><label>@LocEntry["Consistency"]</label></div>
-        <div class="col-12 col-sm-9">
-            <MudSlider T="int" Min="1" Max="5" @bind-Value="Consistency"></MudSlider>
+    @if (ShowConsistency)
+    {
+        <div class="row mt-3">
+            <div class="col-12 col-sm-3"><label>@LocEntry["Consistency"]</label></div>
+            <div class="col-12 col-sm-9">
+                <MudSlider T="int" Min="1" Max="5" @bind-Value="Consistency"></MudSlider>
+            </div>
         </div>
-    </div>
+    }
     <div class="row mt-3">
         <div class="col-12 col-sm-3"><label>@LocEntry["Amount"]</label></div>
         <div class="col-12 col-sm-9">

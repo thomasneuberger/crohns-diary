@@ -12,7 +12,12 @@ public partial class Reports
     public required EntryDatabase Database { get; set; }
 
     [Inject]
+    public required ISettingsDatabase SettingsDatabase { get; set; }
+
+    [Inject]
     public required IStringLocalizer<Reports> Loc { get; set; }
+
+    private bool _showConsistency;
 
     public DateRange Range { get; set; } = new(DateTime.Today.AddMonths(-1), DateTime.Today);
 
@@ -31,6 +36,7 @@ public partial class Reports
 
     protected override async Task OnInitializedAsync()
     {
+        _showConsistency = await SettingsDatabase.GetValue(ISettingsDatabase.ShowConsistency, true);
         await FillChart();
     }
 
@@ -82,7 +88,10 @@ public partial class Reports
                     .Select(e => (double)e.Consistency!.Value)
                     .Average())
             .ToArray();
-        Series.Add(new ChartSeries{Name = Loc["AverageConsistency"], Data = consistencies});
+        if (_showConsistency)
+        {
+            Series.Add(new ChartSeries { Name = Loc["AverageConsistency"], Data = consistencies });
+        }
 
         var urgencies = dailyEntries
             .Select(d =>

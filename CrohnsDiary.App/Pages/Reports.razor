@@ -17,7 +17,7 @@
                 <Columns>
                     <PropertyColumn Property="d => d.Day"></PropertyColumn>
                     <PropertyColumn Property="d => d.Count" Title="@Loc["Count"]"></PropertyColumn>
-                    <PropertyColumn Property="d => d.AverageConsistency" Title="@Loc["AverageConsistency"]"></PropertyColumn>
+                    <PropertyColumn Property="d => d.AverageConsistency" Title="@Loc["AverageConsistency"]" Hidden="!_showConsistency"></PropertyColumn>
                     <PropertyColumn Property="d => d.AverageUrgency" Title="@Loc["AverageUrgency"]"></PropertyColumn>
                 </Columns>
             </MudDataGrid>
