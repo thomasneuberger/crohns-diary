@@ -126,4 +126,7 @@
   <data name="ShowUrgency" xml:space="preserve">
     <value>Dringlichkeit anzeigen</value>
   </data>
+  <data name="ShowEffort" xml:space="preserve">
+    <value>Anstrengung anzeigen</value>
+  </data>
 </root>

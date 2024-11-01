@@ -26,6 +26,8 @@ public partial class Home
 
     private bool ShowAmount { get; set; }
 
+    private bool ShowEffort { get; set; }
+
     private bool ShowUrgency { get; set; }
 
     private int Consistency { get; set; } = 3;
@@ -42,6 +44,7 @@ public partial class Home
     {
         ShowConsistency = await SettingsDatabase.GetBoolValue(ISettingsDatabase.ShowConsistency, true);
         ShowAmount = await SettingsDatabase.GetBoolValue(ISettingsDatabase.ShowAmount, true);
+        ShowEffort = await SettingsDatabase.GetBoolValue(ISettingsDatabase.ShowEffort, true);
         ShowUrgency = await SettingsDatabase.GetBoolValue(ISettingsDatabase.ShowUrgency, true);
     }
 

@@ -127,4 +127,7 @@
     <value>Show urgency
 </value>
   </data>
+  <data name="ShowEffort" xml:space="preserve">
+    <value>Show effort</value>
+  </data>
 </root>

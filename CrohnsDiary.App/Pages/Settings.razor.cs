@@ -8,6 +8,7 @@ public partial class Settings
 {
     private bool _showConsistency;
     private bool _showAmount;
+    private bool _showEffort;
     private bool _showUrgency;
 
     [Inject]
@@ -20,6 +21,7 @@ public partial class Settings
     {
         _showConsistency = await SettingsDatabase.GetBoolValue(ISettingsDatabase.ShowConsistency, true);
         _showAmount = await SettingsDatabase.GetBoolValue(ISettingsDatabase.ShowAmount, true);
+        _showEffort = await SettingsDatabase.GetBoolValue(ISettingsDatabase.ShowEffort, true);
         _showUrgency = await SettingsDatabase.GetBoolValue(ISettingsDatabase.ShowUrgency, true);
     }
 
@@ -40,6 +42,16 @@ public partial class Settings
         {
             _showAmount = value;
             Task.Run(() => SettingsDatabase.SaveValue(ISettingsDatabase.ShowAmount, value));
+        }
+    }
+
+    public bool ShowEffort
+    {
+        get => _showEffort;
+        set
+        {
+            _showEffort = value;
+            Task.Run(() => SettingsDatabase.SaveValue(ISettingsDatabase.ShowEffort, value));
         }
     }
 
