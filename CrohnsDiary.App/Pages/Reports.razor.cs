@@ -90,6 +90,7 @@ public partial class Reports
                 d.Entries
                     .Where(e => e.Consistency.HasValue)
                     .Select(e => (double)e.Consistency!.Value)
+                    .DefaultIfEmpty(0)
                     .Average())
             .ToArray();
         if (_showConsistency)
@@ -102,6 +103,7 @@ public partial class Reports
                 d.Entries
                     .Where(e => e.Urgency.HasValue)
                     .Select(e => (double)e.Urgency!.Value)
+                    .DefaultIfEmpty(0)
                     .Average())
             .ToArray();
         if (_showUrgency)
@@ -114,6 +116,7 @@ public partial class Reports
                 d.Entries
                     .Where(e => e.Air.HasValue)
                     .Select(e => (double)e.Air!.Value)
+                    .DefaultIfEmpty(0)
                     .Average())
             .ToArray();
         if (_showAir)
