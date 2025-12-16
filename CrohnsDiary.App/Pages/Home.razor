@@ -44,6 +44,15 @@
             </div>
         </div>
     }
+    @if (ShowAir)
+    {
+        <div class="row mt-3">
+            <div class="col-12 col-sm-3"><label>@LocEntry["Air"]</label></div>
+            <div class="col-12 col-sm-9">
+                <MudSlider T="int" Min="0" Max="2" @bind-Value="Air"></MudSlider>
+            </div>
+        </div>
+    }
     <div class="row mt-3">
         <div class="col-12">
             <MudButton Color="Color.Primary" Variant="Variant.Filled" @onclick="OnSave">@Loc["Save"]</MudButton>

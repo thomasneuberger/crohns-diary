@@ -10,6 +10,8 @@ public interface ISettingsDatabase
 
     public const string ShowEffort = nameof(ShowEffort);
 
+    public const string ShowAir = nameof(ShowAir);
+
     Task SaveValue<T>(string key, T value);
     Task<bool> GetBoolValue(string key, bool defaultValue);
 }

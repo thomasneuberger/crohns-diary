@@ -12,4 +12,6 @@ public class Entry
     public int? Effort { get; set; }
 
     public int? Urgency { get; set; }
+
+    public int? Air { get; set; }
 }

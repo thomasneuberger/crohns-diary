@@ -19,6 +19,7 @@ public partial class Reports
 
     private bool _showConsistency;
     private bool _showUrgency;
+    private bool _showAir;
 
     public DateRange Range { get; set; } = new(DateTime.Today.AddMonths(-1), DateTime.Today);
 
@@ -39,6 +40,7 @@ public partial class Reports
     {
         _showConsistency = await SettingsDatabase.GetBoolValue(ISettingsDatabase.ShowConsistency, true);
         _showUrgency = await SettingsDatabase.GetBoolValue(ISettingsDatabase.ShowUrgency, true);
+        _showAir = await SettingsDatabase.GetBoolValue(ISettingsDatabase.ShowAir, false);
         await FillChart();
     }
 
@@ -107,12 +109,25 @@ public partial class Reports
             Series.Add(new ChartSeries { Name = Loc["AverageUrgency"], Data = urgencies });
         }
 
+        var airs = dailyEntries
+            .Select(d =>
+                d.Entries
+                    .Where(e => e.Air.HasValue)
+                    .Select(e => (double)e.Air!.Value)
+                    .Average())
+            .ToArray();
+        if (_showAir)
+        {
+            Series.Add(new ChartSeries { Name = Loc["AverageAir"], Data = airs });
+        }
+
         dailyReports = dailyEntries
             .Select((d, index) => new DailyReport(d.Day)
             {
                 Count = entryCounts[index],
                 AverageConsistency = Math.Round(consistencies[index], 1),
-                AverageUrgency = Math.Round(urgencies[index], 1)
+                AverageUrgency = Math.Round(urgencies[index], 1),
+                AverageAir = Math.Round(airs[index], 1)
             })
             .OrderBy(d => d.Day)
             .ToArray();
@@ -127,5 +142,7 @@ public partial class Reports
         public double? AverageConsistency { get; set; }
 
         public double? AverageUrgency { get; set; }
+
+        public double? AverageAir { get; set; }
     }
 }

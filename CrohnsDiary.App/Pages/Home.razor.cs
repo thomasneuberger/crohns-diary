@@ -30,6 +30,8 @@ public partial class Home
 
     private bool ShowUrgency { get; set; }
 
+    private bool ShowAir { get; set; }
+
     private int Consistency { get; set; } = 3;
 
     private int Amount { get; set; } = 3;
@@ -37,6 +39,8 @@ public partial class Home
     private int Effort { get; set; } = 3;
 
     public int Urgency { get; set; } = 3;
+
+    private int Air { get; set; } = 0;
 
     private TimeSpan? SelectedTime { get; set; } = DateTime.Now.TimeOfDay;
 
@@ -46,6 +50,7 @@ public partial class Home
         ShowAmount = await SettingsDatabase.GetBoolValue(ISettingsDatabase.ShowAmount, true);
         ShowEffort = await SettingsDatabase.GetBoolValue(ISettingsDatabase.ShowEffort, true);
         ShowUrgency = await SettingsDatabase.GetBoolValue(ISettingsDatabase.ShowUrgency, true);
+        ShowAir = await SettingsDatabase.GetBoolValue(ISettingsDatabase.ShowAir, false);
     }
 
     private async Task OnSave()
@@ -56,10 +61,11 @@ public partial class Home
         {
             Id = Guid.NewGuid(),
             Timestamp = timestamp,
-            Consistency = Consistency,
-            Amount = Amount,
-            Effort = Effort,
-            Urgency = Urgency
+            Consistency = ShowConsistency ? Consistency : null,
+            Amount = ShowAmount ? Amount : null,
+            Effort = ShowEffort ? Effort : null,
+            Urgency = ShowUrgency ? Urgency : null,
+            Air = ShowAir ? Air : null
         };
         await Database.Entries.Add(entry, entry.Id);
         Snackbar.Add(Loc["Saved"], Severity.Success);
