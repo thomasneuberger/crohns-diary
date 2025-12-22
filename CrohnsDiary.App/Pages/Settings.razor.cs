@@ -10,6 +10,7 @@ public partial class Settings
     private bool _showAmount;
     private bool _showEffort;
     private bool _showUrgency;
+    private bool _showAir;
 
     [Inject]
     public required IStringLocalizer<Settings> Loc { get; set; }
@@ -23,6 +24,7 @@ public partial class Settings
         _showAmount = await SettingsDatabase.GetBoolValue(ISettingsDatabase.ShowAmount, true);
         _showEffort = await SettingsDatabase.GetBoolValue(ISettingsDatabase.ShowEffort, true);
         _showUrgency = await SettingsDatabase.GetBoolValue(ISettingsDatabase.ShowUrgency, true);
+        _showAir = await SettingsDatabase.GetBoolValue(ISettingsDatabase.ShowAir, false);
     }
 
     public bool ShowConsistency
@@ -62,6 +64,16 @@ public partial class Settings
         {
             _showUrgency = value;
             Task.Run(() => SettingsDatabase.SaveValue(ISettingsDatabase.ShowUrgency, value));
+        }
+    }
+
+    public bool ShowAir
+    {
+        get => _showAir;
+        set
+        {
+            _showAir = value;
+            Task.Run(() => SettingsDatabase.SaveValue(ISettingsDatabase.ShowAir, value));
         }
     }
 }

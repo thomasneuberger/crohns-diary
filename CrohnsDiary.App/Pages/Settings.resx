@@ -130,4 +130,7 @@
   <data name="ShowEffort" xml:space="preserve">
     <value>Show effort</value>
   </data>
+  <data name="ShowAir" xml:space="preserve">
+    <value>Show air</value>
+  </data>
 </root>

@@ -129,4 +129,7 @@
   <data name="Urgency" xml:space="preserve">
     <value>Dringlichkeit</value>
   </data>
+  <data name="Air" xml:space="preserve">
+    <value>Luft</value>
+  </data>
 </root>
