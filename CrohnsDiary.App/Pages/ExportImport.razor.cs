@@ -132,7 +132,6 @@ public partial class ExportImport
 
     private async Task ImportEntries(Entry[] entries)
     {
-        var ids = entries.Select(e => e.Id).ToArray();
         await Database.Entries.BulkPut(entries);
 
         Snackbar.Add(Loc["Imported"], Severity.Success);
@@ -140,7 +139,6 @@ public partial class ExportImport
 
     private async Task ImportBloodPressureEntries(BloodPressureEntry[] entries)
     {
-        var ids = entries.Select(e => e.Id).ToArray();
         await Database.BloodPressureEntries.BulkPut(entries);
     }
 
