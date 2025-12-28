@@ -17,6 +17,9 @@ public partial class Reports
     [Inject]
     public required IStringLocalizer<Reports> Loc { get; set; }
 
+    [Inject]
+    public required IStringLocalizer<BloodPressureEntry> LocBloodPressure { get; set; }
+
     private bool _showConsistency;
     private bool _showUrgency;
     private bool _showAir;
@@ -31,6 +34,15 @@ public partial class Reports
     };
     private string[] DayLabels { get; set; } = [];
     private List<ChartSeries> Series { get; } = new();
+
+    private ChartOptions BloodPressureOptions { get; } = new ChartOptions
+    {
+        YAxisTicks = 10,
+        YAxisRequireZeroPoint = false,
+        YAxisLines = true
+    };
+    private string[] BloodPressureDayLabels { get; set; } = [];
+    private List<ChartSeries> BloodPressureSeries { get; } = new();
 
     private IReadOnlyList<DailyReport> dailyReports = [];
 
@@ -62,6 +74,11 @@ public partial class Reports
             .Where(nameof(Entry.Timestamp))
             .Between(Range.Start!, Range.End!.Value.AddDays(1))
             .SortBy(nameof(Entry.Timestamp));
+
+        var bloodPressureEntries = await Database.BloodPressureEntries
+            .Where(nameof(BloodPressureEntry.Timestamp))
+            .Between(Range.Start!, Range.End!.Value.AddDays(1))
+            .SortBy(nameof(BloodPressureEntry.Timestamp));
 
         _loadedDateRange = (from, to);
 
@@ -134,6 +151,61 @@ public partial class Reports
             })
             .OrderBy(d => d.Day)
             .ToArray();
+
+        // Fill blood pressure chart
+        var dailyBloodPressure = bloodPressureEntries
+            .GroupBy(e => DateOnly.FromDateTime(e.Timestamp.Date))
+            .Select(d => new
+            {
+                Day = d.Key,
+                Entries = d.ToArray()
+            })
+            .ToList();
+
+        BloodPressureDayLabels = dailyBloodPressure
+            .Select(d => d.Day.ToShortDateString())
+            .ToArray();
+
+        BloodPressureSeries.Clear();
+
+        var systolicValues = dailyBloodPressure
+            .Select(d =>
+                d.Entries
+                    .Where(e => e.Systolic.HasValue)
+                    .Select(e => (double)e.Systolic!.Value)
+                    .DefaultIfEmpty(0)
+                    .Average())
+            .ToArray();
+        if (systolicValues.Any(v => v > 0))
+        {
+            BloodPressureSeries.Add(new ChartSeries { Name = LocBloodPressure["Systolic"], Data = systolicValues });
+        }
+
+        var diastolicValues = dailyBloodPressure
+            .Select(d =>
+                d.Entries
+                    .Where(e => e.Diastolic.HasValue)
+                    .Select(e => (double)e.Diastolic!.Value)
+                    .DefaultIfEmpty(0)
+                    .Average())
+            .ToArray();
+        if (diastolicValues.Any(v => v > 0))
+        {
+            BloodPressureSeries.Add(new ChartSeries { Name = LocBloodPressure["Diastolic"], Data = diastolicValues });
+        }
+
+        var pulseRateValues = dailyBloodPressure
+            .Select(d =>
+                d.Entries
+                    .Where(e => e.PulseRate.HasValue)
+                    .Select(e => (double)e.PulseRate!.Value)
+                    .DefaultIfEmpty(0)
+                    .Average())
+            .ToArray();
+        if (pulseRateValues.Any(v => v > 0))
+        {
+            BloodPressureSeries.Add(new ChartSeries { Name = LocBloodPressure["PulseRate"], Data = pulseRateValues });
+        }
     }
 
     public struct DailyReport(DateOnly day)

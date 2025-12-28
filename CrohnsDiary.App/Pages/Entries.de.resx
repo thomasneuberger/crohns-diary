@@ -135,4 +135,13 @@
   <data name="Time" xml:space="preserve">
     <value>Uhrzeit</value>
   </data>
+  <data name="Type" xml:space="preserve">
+    <value>Typ</value>
+  </data>
+  <data name="EntryType" xml:space="preserve">
+    <value>Eintrag</value>
+  </data>
+  <data name="BloodPressureType" xml:space="preserve">
+    <value>Blutdruck</value>
+  </data>
 </root>

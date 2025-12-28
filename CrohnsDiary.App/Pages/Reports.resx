@@ -132,4 +132,7 @@
   <data name="AverageAir" xml:space="preserve">
     <value>Average Air</value>
   </data>
+  <data name="BloodPressureTitle" xml:space="preserve">
+    <value>Blood Pressure Measurements</value>
+  </data>
 </root>

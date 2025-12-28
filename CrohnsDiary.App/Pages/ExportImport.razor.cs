@@ -15,6 +15,7 @@ namespace CrohnsDiary.App.Pages;
 public partial class ExportImport
 {
     private const string FileNameJson = "CrohnsDiaryData.json";
+    private const string FileNameBloodPressureJson = "BloodPressureData.json";
     private const string FileNameTemplateDownload = "CrohnsData_Backup_{0}.cdb";
 
     private readonly JsonSerializerOptions _serializerOptions = new(JsonSerializerOptions.Default)
@@ -43,9 +44,13 @@ public partial class ExportImport
         var entries = await Database.Entries
             .ToList();
 
-        var exportData = JsonSerializer.Serialize(entries, _serializerOptions);
+        var bloodPressureEntries = await Database.BloodPressureEntries
+            .ToList();
 
-        using var archiveStream = await CreateArchive(exportData);
+        var exportData = JsonSerializer.Serialize(entries, _serializerOptions);
+        var exportBloodPressureData = JsonSerializer.Serialize(bloodPressureEntries, _serializerOptions);
+
+        using var archiveStream = await CreateArchive(exportData, exportBloodPressureData);
 
         archiveStream.Seek(0, SeekOrigin.Begin);
 
@@ -56,7 +61,7 @@ public partial class ExportImport
         await Js.InvokeVoidAsync("exportData", filename, streamReference);
     }
 
-    private static async Task<MemoryStream> CreateArchive(string exportData)
+    private static async Task<MemoryStream> CreateArchive(string exportData, string exportBloodPressureData)
     {
         var archiveStream = new MemoryStream();
         using var archive = new ZipArchive(archiveStream, ZipArchiveMode.Create, leaveOpen: true);
@@ -65,6 +70,11 @@ public partial class ExportImport
         await using var entryStream = entry.Open();
         await using var entryWriter = new StreamWriter(entryStream, Encoding.UTF8);
         await entryWriter.WriteAsync(exportData);
+
+        var bloodPressureEntry = archive.CreateEntry(FileNameBloodPressureJson, CompressionLevel.SmallestSize);
+        await using var bloodPressureEntryStream = bloodPressureEntry.Open();
+        await using var bloodPressureEntryWriter = new StreamWriter(bloodPressureEntryStream, Encoding.UTF8);
+        await bloodPressureEntryWriter.WriteAsync(exportBloodPressureData);
 
         return archiveStream;
     }
@@ -77,7 +87,7 @@ public partial class ExportImport
             return;
         }
 
-        var json = await ReadImportDataFromArchive(FileToImport);
+        var (json, bloodPressureJson) = await ReadImportDataFromArchive(FileToImport);
 
         if (json is null)
         {
@@ -99,17 +109,40 @@ public partial class ExportImport
         {
             await ImportEntries(entries);
         }
+
+        if (bloodPressureJson is not null)
+        {
+            BloodPressureEntry[]? bloodPressureEntries;
+            try
+            {
+                bloodPressureEntries = JsonSerializer.Deserialize<BloodPressureEntry[]>(bloodPressureJson, _serializerOptions);
+            }
+            catch (JsonException)
+            {
+                // Blood pressure data is optional, so we can continue without it
+                bloodPressureEntries = null;
+            }
+
+            if (bloodPressureEntries != null)
+            {
+                await ImportBloodPressureEntries(bloodPressureEntries);
+            }
+        }
     }
 
     private async Task ImportEntries(Entry[] entries)
     {
-        var ids = entries.Select(e => e.Id).ToArray();
         await Database.Entries.BulkPut(entries);
 
         Snackbar.Add(Loc["Imported"], Severity.Success);
     }
 
-    private async Task<string?> ReadImportDataFromArchive(IBrowserFile file)
+    private async Task ImportBloodPressureEntries(BloodPressureEntry[] entries)
+    {
+        await Database.BloodPressureEntries.BulkPut(entries);
+    }
+
+    private async Task<(string?, string?)> ReadImportDataFromArchive(IBrowserFile file)
     {
         await using var archiveStream = new MemoryStream();
         await using (var uploadedStream = file.OpenReadStream())
@@ -123,13 +156,24 @@ public partial class ExportImport
         if (entry is null)
         {
             Snackbar.Add(Loc["NoDataFound"], Severity.Error);
-            return null;
+            return (null, null);
         }
 
         await using var entryStream = entry.Open();
         using var reader = new StreamReader(entryStream);
         var json = await reader.ReadToEndAsync();
-        return json;
+
+        // Try to read blood pressure data (optional)
+        string? bloodPressureJson = null;
+        var bloodPressureEntry = archive.GetEntry(FileNameBloodPressureJson);
+        if (bloodPressureEntry is not null)
+        {
+            await using var bloodPressureEntryStream = bloodPressureEntry.Open();
+            using var bloodPressureReader = new StreamReader(bloodPressureEntryStream);
+            bloodPressureJson = await bloodPressureReader.ReadToEndAsync();
+        }
+
+        return (json, bloodPressureJson);
     }
 
     private void ImportFileSelected(InputFileChangeEventArgs e)
