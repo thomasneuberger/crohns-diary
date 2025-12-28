@@ -21,7 +21,8 @@ public partial class ExportImport
     {
         WriteIndented = true,
         Converters = { new JsonStringEnumConverter() },
-        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        PropertyNameCaseInsensitive = true
     };
 
     [Inject]
@@ -73,7 +74,7 @@ public partial class ExportImport
     {
         if (FileToImport is null)
         {
-            Snackbar.Add(Loc["SelectFileFirst", Severity.Warning]);
+            Snackbar.Add(Loc["SelectFileFirst"], Severity.Warning);
             return;
         }
 
