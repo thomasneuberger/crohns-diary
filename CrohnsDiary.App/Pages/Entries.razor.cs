@@ -15,7 +15,7 @@ public partial class Entries
     private DateTime? SelectedDate { get; set; }
 
     private DateTime? EntriesListDate { get; set; }
-    private IReadOnlyList<Entry> EntriesOnSelectedDate { get; set; } = [];
+    private IReadOnlyList<CombinedEntry> CombinedEntriesOnSelectedDate { get; set; } = [];
 
     protected override void OnInitialized()
     {
@@ -33,11 +33,45 @@ public partial class Entries
 
     private async Task UpdateEntries(DateTime selectedDate)
     {
-        EntriesOnSelectedDate = await Database.Entries
+        var entries = await Database.Entries
             .Where(nameof(Entry.Timestamp))
             .Between(selectedDate, selectedDate.AddDays(1))
             .ToList();
 
+        var bloodPressureEntries = await Database.BloodPressureEntries
+            .Where(nameof(BloodPressureEntry.Timestamp))
+            .Between(selectedDate, selectedDate.AddDays(1))
+            .ToList();
+
+        var combined = new List<CombinedEntry>();
+        
+        foreach (var entry in entries)
+        {
+            combined.Add(new CombinedEntry
+            {
+                Timestamp = entry.Timestamp,
+                Type = "Entry",
+                Consistency = entry.Consistency,
+                Amount = entry.Amount,
+                Effort = entry.Effort,
+                Urgency = entry.Urgency,
+                Air = entry.Air
+            });
+        }
+
+        foreach (var entry in bloodPressureEntries)
+        {
+            combined.Add(new CombinedEntry
+            {
+                Timestamp = entry.Timestamp,
+                Type = "BloodPressure",
+                Systolic = entry.Systolic,
+                Diastolic = entry.Diastolic,
+                PulseRate = entry.PulseRate
+            });
+        }
+
+        CombinedEntriesOnSelectedDate = combined.OrderBy(e => e.Timestamp).ToList();
         EntriesListDate = selectedDate;
 
         StateHasChanged();
@@ -48,5 +82,23 @@ public partial class Entries
         Navigation.NavigateTo("/export-import");
 
         return Task.CompletedTask;
+    }
+
+    public class CombinedEntry
+    {
+        public DateTime Timestamp { get; set; }
+        public string Type { get; set; } = string.Empty;
+        
+        // Entry fields
+        public int? Consistency { get; set; }
+        public int? Amount { get; set; }
+        public int? Effort { get; set; }
+        public int? Urgency { get; set; }
+        public int? Air { get; set; }
+        
+        // Blood pressure fields
+        public int? Systolic { get; set; }
+        public int? Diastolic { get; set; }
+        public int? PulseRate { get; set; }
     }
 }

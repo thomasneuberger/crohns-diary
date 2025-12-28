@@ -123,4 +123,13 @@
   <data name="Saved" xml:space="preserve">
     <value>Saved.</value>
   </data>
+  <data name="SaveEntry" xml:space="preserve">
+    <value>Save Entry</value>
+  </data>
+  <data name="SaveBloodPressure" xml:space="preserve">
+    <value>Save Blood Pressure</value>
+  </data>
+  <data name="BloodPressureSection" xml:space="preserve">
+    <value>Blood Pressure Measurement</value>
+  </data>
 </root>

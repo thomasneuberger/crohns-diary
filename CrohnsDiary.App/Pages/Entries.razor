@@ -3,6 +3,7 @@
 
 @inject IStringLocalizer<Entries> Loc
 @inject IStringLocalizer<Entry> LocEntry
+@inject IStringLocalizer<BloodPressureEntry> LocBloodPressure
 
 <div class="container-fluid">
     <div class="row">
@@ -10,16 +11,31 @@
     </div>
     <div class="row mt-3">
         <div class="col-12">
-            @if (EntriesOnSelectedDate.Count > 0)
+            @if (CombinedEntriesOnSelectedDate.Count > 0)
             {
-                <MudDataGrid Items="@EntriesOnSelectedDate" Striped="true">
+                <MudDataGrid Items="@CombinedEntriesOnSelectedDate" Striped="true">
                     <Columns>
                         <PropertyColumn Property="e => e.Timestamp" Title="@Loc["Time"]" Format="t"></PropertyColumn>
+                        <TemplateColumn Title="@Loc["Type"]">
+                            <CellTemplate>
+                                @if (context.Item.Type == "Entry")
+                                {
+                                    @Loc["EntryType"]
+                                }
+                                else
+                                {
+                                    @Loc["BloodPressureType"]
+                                }
+                            </CellTemplate>
+                        </TemplateColumn>
                         <PropertyColumn Property="e => e.Consistency" Title="@LocEntry["Consistency"]"></PropertyColumn>
                         <PropertyColumn Property="e => e.Amount" Title="@LocEntry["Amount"]"></PropertyColumn>
                         <PropertyColumn Property="e => e.Effort" Title="@LocEntry["Effort"]"></PropertyColumn>
                         <PropertyColumn Property="e => e.Urgency" Title="@LocEntry["Urgency"]"></PropertyColumn>
                         <PropertyColumn Property="e => e.Air" Title="@LocEntry["Air"]"></PropertyColumn>
+                        <PropertyColumn Property="e => e.Systolic" Title="@LocBloodPressure["Systolic"]"></PropertyColumn>
+                        <PropertyColumn Property="e => e.Diastolic" Title="@LocBloodPressure["Diastolic"]"></PropertyColumn>
+                        <PropertyColumn Property="e => e.PulseRate" Title="@LocBloodPressure["PulseRate"]"></PropertyColumn>
                     </Columns>
                 </MudDataGrid>
             }

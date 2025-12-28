@@ -44,6 +44,13 @@ public partial class Home
 
     private TimeSpan? SelectedTime { get; set; } = DateTime.Now.TimeOfDay;
 
+    // Blood Pressure fields
+    private DateTime? BloodPressureDate { get; set; } = DateTime.Now;
+    private TimeSpan? BloodPressureTime { get; set; } = DateTime.Now.TimeOfDay;
+    private int Systolic { get; set; } = 120;
+    private int Diastolic { get; set; } = 80;
+    private int PulseRate { get; set; } = 70;
+
     protected override async Task OnInitializedAsync()
     {
         ShowConsistency = await SettingsDatabase.GetBoolValue(ISettingsDatabase.ShowConsistency, true);
@@ -68,6 +75,22 @@ public partial class Home
             Air = ShowAir ? Air : null
         };
         await Database.Entries.Add(entry, entry.Id);
+        Snackbar.Add(Loc["Saved"], Severity.Success);
+    }
+
+    private async Task OnSaveBloodPressure()
+    {
+        var timestamp = BloodPressureDate.GetValueOrDefault(DateTime.Now).Date
+            .Add(BloodPressureTime.GetValueOrDefault(DateTime.Now.TimeOfDay));
+        var entry = new BloodPressureEntry
+        {
+            Id = Guid.NewGuid(),
+            Timestamp = timestamp,
+            Systolic = Systolic,
+            Diastolic = Diastolic,
+            PulseRate = PulseRate
+        };
+        await Database.BloodPressureEntries.Add(entry, entry.Id);
         Snackbar.Add(Loc["Saved"], Severity.Success);
     }
 }
