@@ -137,7 +137,7 @@ public partial class Settings
         // Validate number metric
         if (EditingMetricType == MetricType.Number)
         {
-            if (EditingMetricMin.HasValue && EditingMetricMax.HasValue && EditingMetricMin.Value >= EditingMetricMax.Value)
+            if (EditingMetricMin.HasValue && EditingMetricMax.HasValue && EditingMetricMin.Value > EditingMetricMax.Value)
             {
                 Snackbar.Add(Loc["MinMaxValidation"], Severity.Error);
                 return;

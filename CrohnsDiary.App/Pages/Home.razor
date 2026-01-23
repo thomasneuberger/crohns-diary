@@ -65,13 +65,13 @@
                     <MudSlider T="int" 
                                Min="@(metric.MinValue ?? 0)" 
                                Max="@(metric.MaxValue ?? 10)" 
-                               Value="@(CustomNumberValues.GetValueOrDefault(metric.Id, metric.DefaultValue ?? 0))"
+                               Value="@(CustomNumberValues.GetValueOrDefault(metric.Id, metric.DefaultValue ?? metric.MinValue ?? 0))"
                                ValueChanged="@(value => CustomNumberValues[metric.Id] = value)"></MudSlider>
                 }
-                else if (metric.Type == MetricType.Enum)
+                else if (metric.Type == MetricType.Enum && metric.EnumValues.Any())
                 {
                     <MudSelect T="string" 
-                               Value="@(CustomEnumValues.GetValueOrDefault(metric.Id, metric.EnumValues.FirstOrDefault() ?? string.Empty))"
+                               Value="@(CustomEnumValues.GetValueOrDefault(metric.Id, metric.EnumValues.First()))"
                                ValueChanged="@(value => CustomEnumValues[metric.Id] = value)">
                         @foreach (var enumValue in metric.EnumValues)
                         {

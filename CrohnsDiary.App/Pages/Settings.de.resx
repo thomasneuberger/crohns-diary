@@ -193,7 +193,7 @@
     <value>Metrikname ist erforderlich</value>
   </data>
   <data name="MinMaxValidation" xml:space="preserve">
-    <value>Minimalwert muss kleiner als Maximalwert sein</value>
+    <value>Minimalwert muss kleiner oder gleich dem Maximalwert sein</value>
   </data>
   <data name="DefaultValueValidation" xml:space="preserve">
     <value>Standardwert muss zwischen Minimal- und Maximalwert liegen</value>
