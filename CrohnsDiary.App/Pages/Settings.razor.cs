@@ -1,4 +1,5 @@
 ﻿using CrohnsDiary.App.Database;
+using CrohnsDiary.App.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Localization;
 
@@ -18,6 +19,17 @@ public partial class Settings
     [Inject]
     public required ISettingsDatabase SettingsDatabase { get; set; }
 
+    private List<CustomMetric> CustomMetrics { get; set; } = new();
+    
+    private bool ShowMetricDialog { get; set; }
+    private CustomMetric? EditingMetric { get; set; }
+    private string EditingMetricName { get; set; } = string.Empty;
+    private MetricType EditingMetricType { get; set; } = MetricType.Number;
+    private int? EditingMetricMin { get; set; }
+    private int? EditingMetricMax { get; set; }
+    private int? EditingMetricDefault { get; set; }
+    private string EditingMetricEnumValuesText { get; set; } = string.Empty;
+
     protected override async Task OnInitializedAsync()
     {
         _showConsistency = await SettingsDatabase.GetBoolValue(ISettingsDatabase.ShowConsistency, true);
@@ -25,6 +37,8 @@ public partial class Settings
         _showEffort = await SettingsDatabase.GetBoolValue(ISettingsDatabase.ShowEffort, true);
         _showUrgency = await SettingsDatabase.GetBoolValue(ISettingsDatabase.ShowUrgency, true);
         _showAir = await SettingsDatabase.GetBoolValue(ISettingsDatabase.ShowAir, false);
+        
+        CustomMetrics = await SettingsDatabase.GetValue<List<CustomMetric>>(ISettingsDatabase.CustomMetrics) ?? new List<CustomMetric>();
     }
 
     public bool ShowConsistency
@@ -75,5 +89,111 @@ public partial class Settings
             _showAir = value;
             Task.Run(() => SettingsDatabase.SaveValue(ISettingsDatabase.ShowAir, value));
         }
+    }
+    
+    private void AddCustomMetric()
+    {
+        EditingMetric = null;
+        EditingMetricName = string.Empty;
+        EditingMetricType = MetricType.Number;
+        EditingMetricMin = 1;
+        EditingMetricMax = 5;
+        EditingMetricDefault = 3;
+        EditingMetricEnumValuesText = string.Empty;
+        ShowMetricDialog = true;
+    }
+    
+    private void EditCustomMetric(CustomMetric metric)
+    {
+        EditingMetric = metric;
+        EditingMetricName = metric.Name;
+        EditingMetricType = metric.Type;
+        EditingMetricMin = metric.MinValue;
+        EditingMetricMax = metric.MaxValue;
+        EditingMetricDefault = metric.DefaultValue;
+        EditingMetricEnumValuesText = metric.EnumValues.Any() ? string.Join(", ", metric.EnumValues) : string.Empty;
+        ShowMetricDialog = true;
+    }
+    
+    private async Task DeleteCustomMetric(CustomMetric metric)
+    {
+        CustomMetrics.Remove(metric);
+        await SaveCustomMetrics();
+    }
+    
+    private async Task SaveMetric()
+    {
+        if (string.IsNullOrWhiteSpace(EditingMetricName))
+        {
+            return;
+        }
+        
+        if (EditingMetric == null)
+        {
+            // Create new metric
+            var newMetric = new CustomMetric
+            {
+                Id = Guid.NewGuid(),
+                Name = EditingMetricName,
+                Type = EditingMetricType,
+                IsEnabled = true
+            };
+            
+            if (EditingMetricType == MetricType.Number)
+            {
+                newMetric.MinValue = EditingMetricMin;
+                newMetric.MaxValue = EditingMetricMax;
+                newMetric.DefaultValue = EditingMetricDefault;
+            }
+            else if (EditingMetricType == MetricType.Enum)
+            {
+                newMetric.EnumValues = EditingMetricEnumValuesText
+                    .Split(',')
+                    .Select(v => v.Trim())
+                    .Where(v => !string.IsNullOrWhiteSpace(v))
+                    .ToList();
+            }
+            
+            CustomMetrics.Add(newMetric);
+        }
+        else
+        {
+            // Update existing metric
+            EditingMetric.Name = EditingMetricName;
+            EditingMetric.Type = EditingMetricType;
+            
+            if (EditingMetricType == MetricType.Number)
+            {
+                EditingMetric.MinValue = EditingMetricMin;
+                EditingMetric.MaxValue = EditingMetricMax;
+                EditingMetric.DefaultValue = EditingMetricDefault;
+                EditingMetric.EnumValues.Clear();
+            }
+            else if (EditingMetricType == MetricType.Enum)
+            {
+                EditingMetric.EnumValues = EditingMetricEnumValuesText
+                    .Split(',')
+                    .Select(v => v.Trim())
+                    .Where(v => !string.IsNullOrWhiteSpace(v))
+                    .ToList();
+                EditingMetric.MinValue = null;
+                EditingMetric.MaxValue = null;
+                EditingMetric.DefaultValue = null;
+            }
+        }
+        
+        await SaveCustomMetrics();
+        ShowMetricDialog = false;
+    }
+    
+    private void CancelEditMetric()
+    {
+        ShowMetricDialog = false;
+    }
+    
+    private async Task SaveCustomMetrics()
+    {
+        await SettingsDatabase.SaveValue(ISettingsDatabase.CustomMetrics, CustomMetrics);
+        StateHasChanged();
     }
 }

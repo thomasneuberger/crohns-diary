@@ -23,6 +23,8 @@ public partial class Reports
     private bool _showConsistency;
     private bool _showUrgency;
     private bool _showAir;
+    
+    private List<CustomMetric> CustomMetrics { get; set; } = new();
 
     public DateRange Range { get; set; } = new(DateTime.Today.AddMonths(-1), DateTime.Today);
 
@@ -53,6 +55,7 @@ public partial class Reports
         _showConsistency = await SettingsDatabase.GetBoolValue(ISettingsDatabase.ShowConsistency, true);
         _showUrgency = await SettingsDatabase.GetBoolValue(ISettingsDatabase.ShowUrgency, true);
         _showAir = await SettingsDatabase.GetBoolValue(ISettingsDatabase.ShowAir, false);
+        CustomMetrics = await SettingsDatabase.GetValue<List<CustomMetric>>(ISettingsDatabase.CustomMetrics) ?? new List<CustomMetric>();
         await FillChart();
     }
 
@@ -139,6 +142,26 @@ public partial class Reports
         if (_showAir)
         {
             Series.Add(new ChartSeries { Name = Loc["AverageAir"], Data = airs });
+        }
+        
+        // Add custom number metrics to the chart
+        foreach (var metric in CustomMetrics.Where(m => m.IsEnabled && m.Type == MetricType.Number))
+        {
+            var metricId = metric.Id;
+            var customMetricValues = dailyEntries
+                .Select(d =>
+                    d.Entries
+                        .SelectMany(e => e.CustomMetricValues)
+                        .Where(v => v.MetricId == metricId && v.NumberValue.HasValue)
+                        .Select(v => (double)v.NumberValue!.Value)
+                        .DefaultIfEmpty(0)
+                        .Average())
+                .ToArray();
+            
+            if (customMetricValues.Any(v => v > 0))
+            {
+                Series.Add(new ChartSeries { Name = metric.Name, Data = customMetricValues });
+            }
         }
 
         dailyReports = dailyEntries

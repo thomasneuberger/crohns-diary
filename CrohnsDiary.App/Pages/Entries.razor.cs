@@ -11,15 +11,25 @@ public partial class Entries
 
     [Inject]
     public required NavigationManager Navigation { get; set; }
+    
+    [Inject]
+    public required ISettingsDatabase SettingsDatabase { get; set; }
 
     private DateTime? SelectedDate { get; set; }
 
     private DateTime? EntriesListDate { get; set; }
     private IReadOnlyList<CombinedEntry> CombinedEntriesOnSelectedDate { get; set; } = [];
+    
+    private List<CustomMetric> CustomMetrics { get; set; } = new();
 
     protected override void OnInitialized()
     {
         SelectedDate = DateTime.Now.Date;
+    }
+    
+    protected override async Task OnInitializedAsync()
+    {
+        CustomMetrics = await SettingsDatabase.GetValue<List<CustomMetric>>(ISettingsDatabase.CustomMetrics) ?? new List<CustomMetric>();
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -55,7 +65,8 @@ public partial class Entries
                 Amount = entry.Amount,
                 Effort = entry.Effort,
                 Urgency = entry.Urgency,
-                Air = entry.Air
+                Air = entry.Air,
+                CustomMetricValues = entry.CustomMetricValues
             });
         }
 
@@ -83,6 +94,14 @@ public partial class Entries
 
         return Task.CompletedTask;
     }
+    
+    public string GetCustomMetricValue(CombinedEntry entry, Guid metricId)
+    {
+        var value = entry.CustomMetricValues.FirstOrDefault(v => v.MetricId == metricId);
+        if (value == null) return string.Empty;
+        
+        return value.NumberValue?.ToString() ?? value.EnumValue ?? string.Empty;
+    }
 
     public class CombinedEntry
     {
@@ -100,5 +119,8 @@ public partial class Entries
         public int? Systolic { get; set; }
         public int? Diastolic { get; set; }
         public int? PulseRate { get; set; }
+        
+        // Custom metrics
+        public List<CustomMetricValue> CustomMetricValues { get; set; } = new();
     }
 }

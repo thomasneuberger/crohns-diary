@@ -50,6 +50,11 @@ public partial class Home
     private int Systolic { get; set; } = 120;
     private int Diastolic { get; set; } = 80;
     private int PulseRate { get; set; } = 70;
+    
+    // Custom metrics
+    private List<CustomMetric> CustomMetrics { get; set; } = new();
+    private Dictionary<Guid, int> CustomNumberValues { get; set; } = new();
+    private Dictionary<Guid, string> CustomEnumValues { get; set; } = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -58,6 +63,21 @@ public partial class Home
         ShowEffort = await SettingsDatabase.GetBoolValue(ISettingsDatabase.ShowEffort, true);
         ShowUrgency = await SettingsDatabase.GetBoolValue(ISettingsDatabase.ShowUrgency, true);
         ShowAir = await SettingsDatabase.GetBoolValue(ISettingsDatabase.ShowAir, false);
+        
+        CustomMetrics = await SettingsDatabase.GetValue<List<CustomMetric>>(ISettingsDatabase.CustomMetrics) ?? new List<CustomMetric>();
+        
+        // Initialize custom metric values with defaults
+        foreach (var metric in CustomMetrics.Where(m => m.IsEnabled))
+        {
+            if (metric.Type == MetricType.Number && metric.DefaultValue.HasValue)
+            {
+                CustomNumberValues[metric.Id] = metric.DefaultValue.Value;
+            }
+            else if (metric.Type == MetricType.Enum && metric.EnumValues.Any())
+            {
+                CustomEnumValues[metric.Id] = metric.EnumValues.First();
+            }
+        }
     }
 
     private async Task OnSave()
@@ -74,6 +94,28 @@ public partial class Home
             Urgency = ShowUrgency ? Urgency : null,
             Air = ShowAir ? Air : null
         };
+        
+        // Add custom metric values
+        foreach (var metric in CustomMetrics.Where(m => m.IsEnabled))
+        {
+            if (metric.Type == MetricType.Number && CustomNumberValues.ContainsKey(metric.Id))
+            {
+                entry.CustomMetricValues.Add(new CustomMetricValue
+                {
+                    MetricId = metric.Id,
+                    NumberValue = CustomNumberValues[metric.Id]
+                });
+            }
+            else if (metric.Type == MetricType.Enum && CustomEnumValues.ContainsKey(metric.Id))
+            {
+                entry.CustomMetricValues.Add(new CustomMetricValue
+                {
+                    MetricId = metric.Id,
+                    EnumValue = CustomEnumValues[metric.Id]
+                });
+            }
+        }
+        
         await Database.Entries.Add(entry, entry.Id);
         Snackbar.Add(Loc["Saved"], Severity.Success);
     }

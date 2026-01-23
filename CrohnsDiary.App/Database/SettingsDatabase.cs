@@ -14,4 +14,9 @@ public class SettingsDatabase(ILocalStorageService localStorageService) : ISetti
         var value = await localStorageService.GetItemAsync<bool?>(key);
         return value ?? defaultValue;
     }
+
+    public async Task<T?> GetValue<T>(string key)
+    {
+        return await localStorageService.GetItemAsync<T>(key);
+    }
 }
