@@ -2,6 +2,7 @@
 using CrohnsDiary.App.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Localization;
+using MudBlazor;
 
 namespace CrohnsDiary.App.Pages;
 
@@ -18,6 +19,9 @@ public partial class Settings
 
     [Inject]
     public required ISettingsDatabase SettingsDatabase { get; set; }
+    
+    [Inject]
+    public required ISnackbar Snackbar { get; set; }
 
     private List<CustomMetric> CustomMetrics { get; set; } = new();
     
@@ -123,9 +127,48 @@ public partial class Settings
     
     private async Task SaveMetric()
     {
+        // Validate metric name
         if (string.IsNullOrWhiteSpace(EditingMetricName))
         {
+            Snackbar.Add(Loc["MetricNameRequired"], Severity.Error);
             return;
+        }
+        
+        // Validate number metric
+        if (EditingMetricType == MetricType.Number)
+        {
+            if (EditingMetricMin.HasValue && EditingMetricMax.HasValue && EditingMetricMin.Value >= EditingMetricMax.Value)
+            {
+                Snackbar.Add(Loc["MinMaxValidation"], Severity.Error);
+                return;
+            }
+            
+            if (EditingMetricDefault.HasValue)
+            {
+                var min = EditingMetricMin ?? int.MinValue;
+                var max = EditingMetricMax ?? int.MaxValue;
+                if (EditingMetricDefault.Value < min || EditingMetricDefault.Value > max)
+                {
+                    Snackbar.Add(Loc["DefaultValueValidation"], Severity.Error);
+                    return;
+                }
+            }
+        }
+        
+        // Validate enum metric
+        if (EditingMetricType == MetricType.Enum)
+        {
+            var enumValues = EditingMetricEnumValuesText
+                .Split(',')
+                .Select(v => v.Trim())
+                .Where(v => !string.IsNullOrWhiteSpace(v))
+                .ToList();
+            
+            if (enumValues.Count == 0)
+            {
+                Snackbar.Add(Loc["EnumValuesRequired"], Severity.Error);
+                return;
+            }
         }
         
         if (EditingMetric == null)
@@ -184,6 +227,7 @@ public partial class Settings
         
         await SaveCustomMetrics();
         ShowMetricDialog = false;
+        Snackbar.Add(Loc["MetricSaved"], Severity.Success);
     }
     
     private void CancelEditMetric()

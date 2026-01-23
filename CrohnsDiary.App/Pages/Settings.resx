@@ -190,4 +190,19 @@
   <data name="Save" xml:space="preserve">
     <value>Save</value>
   </data>
+  <data name="MetricNameRequired" xml:space="preserve">
+    <value>Metric name is required</value>
+  </data>
+  <data name="MinMaxValidation" xml:space="preserve">
+    <value>Minimum value must be less than maximum value</value>
+  </data>
+  <data name="DefaultValueValidation" xml:space="preserve">
+    <value>Default value must be between minimum and maximum values</value>
+  </data>
+  <data name="EnumValuesRequired" xml:space="preserve">
+    <value>At least one enum value is required</value>
+  </data>
+  <data name="MetricSaved" xml:space="preserve">
+    <value>Metric saved successfully</value>
+  </data>
 </root>
