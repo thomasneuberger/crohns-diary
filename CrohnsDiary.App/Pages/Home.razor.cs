@@ -75,7 +75,7 @@ public partial class Home
             }
             else if (metric.Type == MetricType.Enum && metric.EnumValues.Any())
             {
-                CustomEnumValues[metric.Id] = metric.EnumValues.First();
+                CustomEnumValues[metric.Id] = metric.EnumDefaultValue ?? metric.EnumValues.First();
             }
         }
     }

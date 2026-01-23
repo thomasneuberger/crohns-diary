@@ -20,4 +20,5 @@ public class CustomMetric
     
     // Enum type settings
     public List<string> EnumValues { get; set; } = new();
+    public string? EnumDefaultValue { get; set; }
 }

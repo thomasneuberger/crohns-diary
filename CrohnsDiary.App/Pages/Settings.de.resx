@@ -171,6 +171,9 @@
   <data name="EnumValues" xml:space="preserve">
     <value>Auswahlwerte</value>
   </data>
+  <data name="EnumDefaultValue" xml:space="preserve">
+    <value>Standardwert</value>
+  </data>
   <data name="EnumValuesHelper" xml:space="preserve">
     <value>Werte durch Kommas getrennt eingeben</value>
   </data>

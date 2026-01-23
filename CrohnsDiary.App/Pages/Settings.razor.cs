@@ -33,6 +33,7 @@ public partial class Settings
     private int? EditingMetricMax { get; set; }
     private int? EditingMetricDefault { get; set; }
     private string EditingMetricEnumValuesText { get; set; } = string.Empty;
+    private string? EditingMetricEnumDefault { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -104,6 +105,7 @@ public partial class Settings
         EditingMetricMax = 5;
         EditingMetricDefault = 3;
         EditingMetricEnumValuesText = string.Empty;
+        EditingMetricEnumDefault = null;
         ShowMetricDialog = true;
     }
     
@@ -116,6 +118,7 @@ public partial class Settings
         EditingMetricMax = metric.MaxValue;
         EditingMetricDefault = metric.DefaultValue;
         EditingMetricEnumValuesText = metric.EnumValues.Any() ? string.Join(", ", metric.EnumValues) : string.Empty;
+        EditingMetricEnumDefault = metric.EnumDefaultValue;
         ShowMetricDialog = true;
     }
     
@@ -195,6 +198,7 @@ public partial class Settings
                     .Select(v => v.Trim())
                     .Where(v => !string.IsNullOrWhiteSpace(v))
                     .ToList();
+                newMetric.EnumDefaultValue = EditingMetricEnumDefault;
             }
             
             CustomMetrics.Add(newMetric);
@@ -219,6 +223,7 @@ public partial class Settings
                     .Select(v => v.Trim())
                     .Where(v => !string.IsNullOrWhiteSpace(v))
                     .ToList();
+                EditingMetric.EnumDefaultValue = EditingMetricEnumDefault;
                 EditingMetric.MinValue = null;
                 EditingMetric.MaxValue = null;
                 EditingMetric.DefaultValue = null;

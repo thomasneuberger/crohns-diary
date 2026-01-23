@@ -71,7 +71,7 @@
                 else if (metric.Type == MetricType.Enum && metric.EnumValues.Any())
                 {
                     <MudSelect T="string" 
-                               Value="@(CustomEnumValues.GetValueOrDefault(metric.Id, metric.EnumValues.First()))"
+                               Value="@(CustomEnumValues.GetValueOrDefault(metric.Id, metric.EnumDefaultValue ?? metric.EnumValues.First()))"
                                ValueChanged="@(value => CustomEnumValues[metric.Id] = value)">
                         @foreach (var enumValue in metric.EnumValues)
                         {

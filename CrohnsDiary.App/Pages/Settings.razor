@@ -64,6 +64,10 @@
                             else if (metric.Type == MetricType.Enum && metric.EnumValues.Any())
                             {
                                 <MudText Typo="Typo.body2">@Loc["Values"]: @string.Join(", ", metric.EnumValues)</MudText>
+                                @if (!string.IsNullOrEmpty(metric.EnumDefaultValue))
+                                {
+                                    <MudText Typo="Typo.body2">@Loc["Default"]: @metric.EnumDefaultValue</MudText>
+                                }
                             }
                         </div>
                     </MudCardContent>
@@ -93,6 +97,15 @@
             else if (EditingMetricType == MetricType.Enum)
             {
                 <MudTextField @bind-Value="EditingMetricEnumValuesText" Label="@Loc["EnumValues"]" HelperText="@Loc["EnumValuesHelper"]" Lines="3" Class="mb-3" />
+                <MudSelect @bind-Value="EditingMetricEnumDefault" Label="@Loc["EnumDefaultValue"]" Class="mb-3" Clearable="true">
+                    @if (!string.IsNullOrWhiteSpace(EditingMetricEnumValuesText))
+                    {
+                        @foreach (var value in EditingMetricEnumValuesText.Split(',').Select(v => v.Trim()).Where(v => !string.IsNullOrWhiteSpace(v)))
+                        {
+                            <MudSelectItem Value="@value">@value</MudSelectItem>
+                        }
+                    }
+                </MudSelect>
             }
             
             <div class="d-flex justify-end gap-2">
