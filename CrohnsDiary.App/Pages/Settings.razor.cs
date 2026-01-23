@@ -198,7 +198,16 @@ public partial class Settings
                     .Select(v => v.Trim())
                     .Where(v => !string.IsNullOrWhiteSpace(v))
                     .ToList();
-                newMetric.EnumDefaultValue = EditingMetricEnumDefault;
+                
+                // Only set default if it exists in the enum values list
+                if (!string.IsNullOrEmpty(EditingMetricEnumDefault) && newMetric.EnumValues.Contains(EditingMetricEnumDefault))
+                {
+                    newMetric.EnumDefaultValue = EditingMetricEnumDefault;
+                }
+                else
+                {
+                    newMetric.EnumDefaultValue = null;
+                }
             }
             
             CustomMetrics.Add(newMetric);
@@ -223,7 +232,17 @@ public partial class Settings
                     .Select(v => v.Trim())
                     .Where(v => !string.IsNullOrWhiteSpace(v))
                     .ToList();
-                EditingMetric.EnumDefaultValue = EditingMetricEnumDefault;
+                
+                // Only set default if it exists in the enum values list
+                if (!string.IsNullOrEmpty(EditingMetricEnumDefault) && EditingMetric.EnumValues.Contains(EditingMetricEnumDefault))
+                {
+                    EditingMetric.EnumDefaultValue = EditingMetricEnumDefault;
+                }
+                else
+                {
+                    EditingMetric.EnumDefaultValue = null;
+                }
+                
                 EditingMetric.MinValue = null;
                 EditingMetric.MaxValue = null;
                 EditingMetric.DefaultValue = null;
