@@ -54,6 +54,35 @@
             </div>
         </div>
     }
+    
+    @foreach (var metric in CustomMetrics.Where(m => m.IsEnabled))
+    {
+        <div class="row mt-3">
+            <div class="col-12 col-sm-3"><label>@metric.Name</label></div>
+            <div class="col-12 col-sm-9">
+                @if (metric.Type == MetricType.Number)
+                {
+                    <MudSlider T="int" 
+                               Min="@(metric.MinValue ?? 0)" 
+                               Max="@(metric.MaxValue ?? 10)" 
+                               Value="@(CustomNumberValues.GetValueOrDefault(metric.Id, metric.DefaultValue ?? metric.MinValue ?? 0))"
+                               ValueChanged="@(value => CustomNumberValues[metric.Id] = value)"></MudSlider>
+                }
+                else if (metric.Type == MetricType.Enum && metric.EnumValues.Any())
+                {
+                    <MudSelect T="string" 
+                               Value="@(CustomEnumValues.GetValueOrDefault(metric.Id, metric.EnumDefaultValue ?? metric.EnumValues.First()))"
+                               ValueChanged="@(value => CustomEnumValues[metric.Id] = value)">
+                        @foreach (var enumValue in metric.EnumValues)
+                        {
+                            <MudSelectItem Value="@enumValue">@enumValue</MudSelectItem>
+                        }
+                    </MudSelect>
+                }
+            </div>
+        </div>
+    }
+    
     <div class="row mt-3">
         <div class="col-12">
             <MudButton Color="Color.Primary" Variant="Variant.Filled" @onclick="OnSave">@Loc["SaveEntry"]</MudButton>

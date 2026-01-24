@@ -33,6 +33,16 @@
                         <PropertyColumn Property="e => e.Effort" Title="@LocEntry["Effort"]"></PropertyColumn>
                         <PropertyColumn Property="e => e.Urgency" Title="@LocEntry["Urgency"]"></PropertyColumn>
                         <PropertyColumn Property="e => e.Air" Title="@LocEntry["Air"]"></PropertyColumn>
+                        @foreach (var metric in CustomMetrics.Where(m => m.IsEnabled))
+                        {
+                            var metricId = metric.Id;
+                            var metricName = metric.Name;
+                            <TemplateColumn Title="@metricName">
+                                <CellTemplate>
+                                    @GetCustomMetricValue(context.Item, metricId)
+                                </CellTemplate>
+                            </TemplateColumn>
+                        }
                         <PropertyColumn Property="e => e.Systolic" Title="@LocBloodPressure["Systolic"]"></PropertyColumn>
                         <PropertyColumn Property="e => e.Diastolic" Title="@LocBloodPressure["Diastolic"]"></PropertyColumn>
                         <PropertyColumn Property="e => e.PulseRate" Title="@LocBloodPressure["PulseRate"]"></PropertyColumn>

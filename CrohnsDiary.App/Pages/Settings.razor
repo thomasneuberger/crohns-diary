@@ -1,10 +1,12 @@
 ﻿@page "/settings"
+@using CrohnsDiary.App.Models
 
 @inject IStringLocalizer<NavMenu> LocNav
 
 <h1>@LocNav["Settings"]</h1>
 
 <div class="container-fluid">
+    <h3 class="mt-3">@Loc["BuiltInMetrics"]</h3>
     <div class="row">
         <div class="col-12">
             <MudSwitch @bind-Value="ShowConsistency" Color="Color.Primary">@Loc["ShowConsistency"]</MudSwitch>
@@ -30,4 +32,86 @@
             <MudSwitch @bind-Value="ShowAir" Color="Color.Primary">@Loc["ShowAir"]</MudSwitch>
         </div>
     </div>
+    
+    <h3 class="mt-5">@Loc["CustomMetrics"]</h3>
+    <div class="row mb-3">
+        <div class="col-12">
+            <MudButton Color="Color.Primary" Variant="Variant.Filled" @onclick="AddCustomMetric">@Loc["AddCustomMetric"]</MudButton>
+        </div>
+    </div>
+    
+    @foreach (var metric in CustomMetrics)
+    {
+        var metricId = metric.Id;
+        <div class="row mb-2">
+            <div class="col-12">
+                <MudCard>
+                    <MudCardContent>
+                        <div class="d-flex align-items-center">
+                            <MudSwitch Value="@metric.IsEnabled" 
+                                       ValueChanged="@(async (bool val) => { metric.IsEnabled = val; await SaveCustomMetrics(); })" 
+                                       Color="Color.Primary">@metric.Name</MudSwitch>
+                            <MudSpacer />
+                            <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Primary" OnClick="@(() => EditCustomMetric(metric))" />
+                            <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick="@(() => DeleteCustomMetric(metric))" />
+                        </div>
+                        <div class="mt-2">
+                            <MudText Typo="Typo.body2">@Loc["Type"]: @metric.Type</MudText>
+                            @if (metric.Type == MetricType.Number)
+                            {
+                                <MudText Typo="Typo.body2">@Loc["Range"]: @metric.MinValue - @metric.MaxValue (@Loc["Default"]: @metric.DefaultValue)</MudText>
+                            }
+                            else if (metric.Type == MetricType.Enum && metric.EnumValues.Any())
+                            {
+                                <MudText Typo="Typo.body2">@Loc["Values"]: @string.Join(", ", metric.EnumValues)</MudText>
+                                @if (!string.IsNullOrEmpty(metric.EnumDefaultValue))
+                                {
+                                    <MudText Typo="Typo.body2">@Loc["Default"]: @metric.EnumDefaultValue</MudText>
+                                }
+                            }
+                        </div>
+                    </MudCardContent>
+                </MudCard>
+            </div>
+        </div>
+    }
 </div>
+
+@if (ShowMetricDialog)
+{
+    <MudOverlay Visible="true" DarkBackground="true" OnClick="CancelEditMetric">
+        <MudPaper Class="pa-4" Style="max-width: 600px; width: 100%;" @onclick:stopPropagation="true">
+            <MudText Typo="Typo.h6" Class="mb-3">@(EditingMetric != null ? EditingMetric.Name : Loc["NewCustomMetric"])</MudText>
+            <MudTextField @bind-Value="EditingMetricName" Label="@Loc["MetricName"]" Required="true" Class="mb-3" />
+            <MudSelect @bind-Value="EditingMetricType" Label="@Loc["MetricType"]" Required="true" Class="mb-3">
+                <MudSelectItem Value="@(MetricType.Number)">@Loc["Number"]</MudSelectItem>
+                <MudSelectItem Value="@(MetricType.Enum)">@Loc["Enum"]</MudSelectItem>
+            </MudSelect>
+            
+            @if (EditingMetricType == MetricType.Number)
+            {
+                <MudNumericField @bind-Value="EditingMetricMin" Label="@Loc["MinValue"]" Class="mb-3" />
+                <MudNumericField @bind-Value="EditingMetricMax" Label="@Loc["MaxValue"]" Class="mb-3" />
+                <MudNumericField @bind-Value="EditingMetricDefault" Label="@Loc["DefaultValue"]" Class="mb-3" />
+            }
+            else if (EditingMetricType == MetricType.Enum)
+            {
+                <MudTextField @bind-Value="EditingMetricEnumValuesText" Label="@Loc["EnumValues"]" HelperText="@Loc["EnumValuesHelper"]" Lines="3" Class="mb-3" />
+                <MudSelect @bind-Value="EditingMetricEnumDefault" Label="@Loc["EnumDefaultValue"]" Class="mb-3" Clearable="true">
+                    @if (!string.IsNullOrWhiteSpace(EditingMetricEnumValuesText))
+                    {
+                        @foreach (var value in EditingMetricEnumValuesText.Split(',').Select(v => v.Trim()).Where(v => !string.IsNullOrWhiteSpace(v)))
+                        {
+                            <MudSelectItem Value="@value">@value</MudSelectItem>
+                        }
+                    }
+                </MudSelect>
+            }
+            
+            <div class="d-flex justify-end gap-2">
+                <MudButton Color="Color.Default" OnClick="CancelEditMetric">@Loc["Cancel"]</MudButton>
+                <MudButton Color="Color.Primary" OnClick="SaveMetric">@Loc["Save"]</MudButton>
+            </div>
+        </MudPaper>
+    </MudOverlay>
+}

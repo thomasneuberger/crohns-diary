@@ -14,4 +14,6 @@ public class Entry
     public int? Urgency { get; set; }
 
     public int? Air { get; set; }
+
+    public List<CustomMetricValue> CustomMetricValues { get; set; } = new();
 }

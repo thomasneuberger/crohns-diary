@@ -133,4 +133,79 @@
   <data name="ShowAir" xml:space="preserve">
     <value>Show air</value>
   </data>
+  <data name="BuiltInMetrics" xml:space="preserve">
+    <value>Built-in Metrics</value>
+  </data>
+  <data name="CustomMetrics" xml:space="preserve">
+    <value>Custom Metrics</value>
+  </data>
+  <data name="AddCustomMetric" xml:space="preserve">
+    <value>Add Custom Metric</value>
+  </data>
+  <data name="NewCustomMetric" xml:space="preserve">
+    <value>New Custom Metric</value>
+  </data>
+  <data name="MetricName" xml:space="preserve">
+    <value>Metric Name</value>
+  </data>
+  <data name="MetricType" xml:space="preserve">
+    <value>Metric Type</value>
+  </data>
+  <data name="Type" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="Number" xml:space="preserve">
+    <value>Number</value>
+  </data>
+  <data name="Enum" xml:space="preserve">
+    <value>Enum</value>
+  </data>
+  <data name="MinValue" xml:space="preserve">
+    <value>Minimum Value</value>
+  </data>
+  <data name="MaxValue" xml:space="preserve">
+    <value>Maximum Value</value>
+  </data>
+  <data name="DefaultValue" xml:space="preserve">
+    <value>Default Value</value>
+  </data>
+  <data name="EnumValues" xml:space="preserve">
+    <value>Enum Values</value>
+  </data>
+  <data name="EnumDefaultValue" xml:space="preserve">
+    <value>Default Value</value>
+  </data>
+  <data name="EnumValuesHelper" xml:space="preserve">
+    <value>Enter values separated by commas</value>
+  </data>
+  <data name="Range" xml:space="preserve">
+    <value>Range</value>
+  </data>
+  <data name="Default" xml:space="preserve">
+    <value>Default</value>
+  </data>
+  <data name="Values" xml:space="preserve">
+    <value>Values</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="MetricNameRequired" xml:space="preserve">
+    <value>Metric name is required</value>
+  </data>
+  <data name="MinMaxValidation" xml:space="preserve">
+    <value>Minimum value must be less than or equal to maximum value</value>
+  </data>
+  <data name="DefaultValueValidation" xml:space="preserve">
+    <value>Default value must be between minimum and maximum values</value>
+  </data>
+  <data name="EnumValuesRequired" xml:space="preserve">
+    <value>At least one enum value is required</value>
+  </data>
+  <data name="MetricSaved" xml:space="preserve">
+    <value>Metric saved successfully</value>
+  </data>
 </root>
