@@ -12,18 +12,24 @@ updates:
     directories:
       - "/CrohnsDiary.App"
       - "/CrohnsDiary.Deploy"
+    patterns:
+      - "*"
     assignees:
       - "thomasneuberger"
     multi-ecosystem-group: "dependencies"
 
   - package-ecosystem: "npm"
     directory: "/CrohnsDiary.App"
+    patterns:
+      - "*"
     assignees:
       - "thomasneuberger"
     multi-ecosystem-group: "dependencies"
 
   - package-ecosystem: "github-actions"
     directory: "/"
+    patterns:
+      - "*"
     assignees:
       - "thomasneuberger"
     multi-ecosystem-group: "dependencies"
