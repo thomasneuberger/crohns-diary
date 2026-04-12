@@ -28,23 +28,23 @@ public partial class Reports
 
     public DateRange Range { get; set; } = new(DateTime.Today.AddMonths(-1), DateTime.Today);
 
-    private ChartOptions Options { get; } = new ChartOptions
+    private LineChartOptions Options { get; } = new LineChartOptions
     {
         YAxisTicks = 1,
         YAxisRequireZeroPoint = true,
         YAxisLines = true
     };
     private string[] DayLabels { get; set; } = [];
-    private List<ChartSeries> Series { get; } = new();
+    private List<ChartSeries<double>> Series { get; } = new();
 
-    private ChartOptions BloodPressureOptions { get; } = new ChartOptions
+    private LineChartOptions BloodPressureOptions { get; } = new LineChartOptions
     {
         YAxisTicks = 10,
         YAxisRequireZeroPoint = false,
         YAxisLines = true
     };
     private string[] BloodPressureDayLabels { get; set; } = [];
-    private List<ChartSeries> BloodPressureSeries { get; } = new();
+    private List<ChartSeries<double>> BloodPressureSeries { get; } = new();
 
     private IReadOnlyList<DailyReport> dailyReports = [];
 
@@ -103,7 +103,7 @@ public partial class Reports
         var entryCounts = dailyEntries
             .Select(d => (double)d.Entries.Length)
             .ToArray();
-        Series.Add(new ChartSeries{Name = Loc["Count"], Data = entryCounts});
+        Series.Add(new ChartSeries<double>{Name = Loc["Count"], Data = new ChartData<double>(entryCounts)});
 
         var consistencies = dailyEntries
             .Select(d =>
@@ -115,7 +115,7 @@ public partial class Reports
             .ToArray();
         if (_showConsistency)
         {
-            Series.Add(new ChartSeries { Name = Loc["AverageConsistency"], Data = consistencies });
+            Series.Add(new ChartSeries<double> { Name = Loc["AverageConsistency"], Data = new ChartData<double>(consistencies) });
         }
 
         var urgencies = dailyEntries
@@ -128,7 +128,7 @@ public partial class Reports
             .ToArray();
         if (_showUrgency)
         {
-            Series.Add(new ChartSeries { Name = Loc["AverageUrgency"], Data = urgencies });
+            Series.Add(new ChartSeries<double> { Name = Loc["AverageUrgency"], Data = new ChartData<double>(urgencies) });
         }
 
         var airs = dailyEntries
@@ -141,7 +141,7 @@ public partial class Reports
             .ToArray();
         if (_showAir)
         {
-            Series.Add(new ChartSeries { Name = Loc["AverageAir"], Data = airs });
+            Series.Add(new ChartSeries<double> { Name = Loc["AverageAir"], Data = new ChartData<double>(airs) });
         }
         
         // Add custom number metrics to the chart
@@ -160,7 +160,7 @@ public partial class Reports
             
             if (customMetricValues.Any(v => v > 0))
             {
-                Series.Add(new ChartSeries { Name = metric.Name, Data = customMetricValues });
+                Series.Add(new ChartSeries<double> { Name = metric.Name, Data = new ChartData<double>(customMetricValues) });
             }
         }
 
@@ -201,7 +201,7 @@ public partial class Reports
             .ToArray();
         if (systolicValues.Any(v => v > 0))
         {
-            BloodPressureSeries.Add(new ChartSeries { Name = LocBloodPressure["Systolic"], Data = systolicValues });
+            BloodPressureSeries.Add(new ChartSeries<double> { Name = LocBloodPressure["Systolic"], Data = new ChartData<double>(systolicValues) });
         }
 
         var diastolicValues = dailyBloodPressure
@@ -214,7 +214,7 @@ public partial class Reports
             .ToArray();
         if (diastolicValues.Any(v => v > 0))
         {
-            BloodPressureSeries.Add(new ChartSeries { Name = LocBloodPressure["Diastolic"], Data = diastolicValues });
+            BloodPressureSeries.Add(new ChartSeries<double> { Name = LocBloodPressure["Diastolic"], Data = new ChartData<double>(diastolicValues) });
         }
 
         var pulseRateValues = dailyBloodPressure
@@ -227,7 +227,7 @@ public partial class Reports
             .ToArray();
         if (pulseRateValues.Any(v => v > 0))
         {
-            BloodPressureSeries.Add(new ChartSeries { Name = LocBloodPressure["PulseRate"], Data = pulseRateValues });
+            BloodPressureSeries.Add(new ChartSeries<double> { Name = LocBloodPressure["PulseRate"], Data = new ChartData<double>(pulseRateValues) });
         }
     }
 

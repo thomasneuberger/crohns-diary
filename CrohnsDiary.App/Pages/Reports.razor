@@ -9,7 +9,7 @@
     </div>
     <div class="row">
         <div class="col-12">
-            <MudChart ChartType="ChartType.Line" ChartSeries="Series" XAxisLabels="DayLabels" ChartOptions="Options" CanHideSeries Width="100%" Height="350px"></MudChart>
+            <MudChart T="double" ChartType="ChartType.Line" ChartSeries="Series" ChartLabels="DayLabels" ChartOptions="Options" CanHideSeries Width="100%" Height="350px"></MudChart>
         </div>
     </div>
     <div class="row">
@@ -36,7 +36,7 @@
     {
         <div class="row mt-3">
             <div class="col-12">
-                <MudChart ChartType="ChartType.Line" ChartSeries="BloodPressureSeries" XAxisLabels="BloodPressureDayLabels" ChartOptions="BloodPressureOptions" CanHideSeries Width="100%" Height="350px"></MudChart>
+                <MudChart T="double" ChartType="ChartType.Line" ChartSeries="BloodPressureSeries" ChartLabels="BloodPressureDayLabels" ChartOptions="BloodPressureOptions" CanHideSeries Width="100%" Height="350px"></MudChart>
             </div>
         </div>
     }
