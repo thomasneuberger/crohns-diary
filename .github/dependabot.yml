@@ -1,29 +1,35 @@
 version: 2
 multi-ecosystem-groups:
-	dependencies:
-		schedule:
-			interval: "weekly"
-			day: "monday"
-			time: "07:00"
-			timezone: "Europe/Berlin"
+  dependencies:
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "07:00"
+      timezone: "Europe/Berlin"
 
 updates:
-	- package-ecosystem: "nuget"
-		directories:
-			- "/CrohnsDiary.App"
-			- "/CrohnsDiary.Deploy"
-		assignees:
-			- "thomasneuberger"
-		multi-ecosystem-group: "dependencies"
+  - package-ecosystem: "nuget"
+    directories:
+      - "/CrohnsDiary.App"
+      - "/CrohnsDiary.Deploy"
+    patterns:
+      - "*"
+    assignees:
+      - "thomasneuberger"
+    multi-ecosystem-group: "dependencies"
 
-	- package-ecosystem: "npm"
-		directory: "/CrohnsDiary.App"
-		assignees:
-			- "thomasneuberger"
-		multi-ecosystem-group: "dependencies"
+  - package-ecosystem: "npm"
+    directory: "/CrohnsDiary.App"
+    patterns:
+      - "*"
+    assignees:
+      - "thomasneuberger"
+    multi-ecosystem-group: "dependencies"
 
-	- package-ecosystem: "github-actions"
-		directory: "/"
-		assignees:
-			- "thomasneuberger"
-		multi-ecosystem-group: "dependencies"
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    patterns:
+      - "*"
+    assignees:
+      - "thomasneuberger"
+    multi-ecosystem-group: "dependencies"
