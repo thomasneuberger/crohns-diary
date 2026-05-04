@@ -8,8 +8,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Pulumi" Version="3.103.0" />
-        <PackageReference Include="Pulumi.AzureNative" Version="3.16.0" />
+        <PackageReference Include="Pulumi" Version="3.104.0" />
+        <PackageReference Include="Pulumi.AzureNative" Version="3.17.0" />
         <PackageReference Include="Pulumi.SyncedFolder" Version="0.12.4" />
     </ItemGroup>
 
