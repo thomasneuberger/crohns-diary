@@ -3,16 +3,16 @@
 
 ## Checklist
 
-### Build & Test
+### Build & Test _(automated by Coding Agent)_
 - [ ] `dotnet restore` — completed without errors
 - [ ] `dotnet build --no-restore` — completed without errors
 - [ ] `dotnet test --no-build --verbosity normal` — all tests pass
 
 ### Run & Smoke Check
-- [ ] `dotnet run --project CrohnsDiary.App` — app starts without errors
-- [ ] Home page loads without errors
-- [ ] Main navigation renders and core pages open
-- [ ] No obvious startup or browser console errors
+- [ ] `dotnet run --project CrohnsDiary.App` — app starts without errors _(automated by Coding Agent)_
+- [ ] Home page loads without errors _(manual — human reviewer)_
+- [ ] Main navigation renders and core pages open _(manual — human reviewer)_
+- [ ] No obvious startup or browser console errors _(manual — human reviewer)_
 
 ### Localization _(if user-facing text changed)_
 - [ ] Default resource file (`*.resx`) updated
@@ -26,4 +26,3 @@
 ### Dependencies _(if NuGet packages added or updated)_
 - [ ] New packages are MIT licensed
 - [ ] Using newest stable version
-- [ ] Fire-and-forget async uses `AsyncAwaitBestPractices` if applicable

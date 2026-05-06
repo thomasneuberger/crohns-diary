@@ -2,8 +2,7 @@
 name: deps-license-policy
 description: >
   Enforces the repository's dependency policy: MIT-licensed packages only,
-  newest stable versions preferred, and correct use of AsyncAwaitBestPractices
-  for fire-and-forget async patterns.
+  newest stable versions preferred.
 ---
 
 ## Role
@@ -28,15 +27,6 @@ Activate when a PR:
 - Do not pin to an older version without a documented reason.
 - Pre-release versions are only acceptable if no stable version exists.
 
-### Fire-and-forget async
-- If the code introduces a fire-and-forget async call (e.g., calling an `async` method without `await`), use **AsyncAwaitBestPractices** (MIT licensed).
-- Example pattern:
-  ```csharp
-  // Instead of: _ = DoWorkAsync();
-  DoWorkAsync().SafeFireAndForget(onException: ex => logger.LogError(ex, "Background task failed"));
-  ```
-- Do not use `async void` outside of Blazor event handlers (where it is unavoidable).
-
 ## Dependabot PR review
 When reviewing a Dependabot PR:
 1. Confirm the new version is the latest stable.
@@ -49,5 +39,4 @@ When a new dependency is introduced:
 ```
 - [ ] New package is MIT licensed (verified on NuGet.org / GitHub)
 - [ ] Using newest stable version
-- [ ] Fire-and-forget async uses `AsyncAwaitBestPractices` if applicable
 ```

@@ -23,10 +23,30 @@ Activate when a PR modifies `.razor` files, `.razor.cs` files, files under `Croh
 ## Blazor / MudBlazor checks
 
 - **Nullable handling:** Use `int?`, `string?`, etc. where inputs can be empty or unset; avoid implicit default-value assumptions.
-- **Async event handlers:** Use `async Task` (not `async void`) for Blazor event callbacks. If fire-and-forget is truly needed, use `AsyncAwaitBestPractices`.
+- **Async event handlers:** Use `async Task` (not `async void`) for Blazor event callbacks.
 - **State updates:** Call `StateHasChanged()` when mutating state outside of Blazor's normal rendering cycle.
 - **Validation:** Ensure `EditForm` validation is wired correctly; `OnValidSubmit` should not fire if the form is invalid.
 - **MudBlazor bindings:** Double-check `@bind-Value` vs `Value` + `ValueChanged` pairs; prefer two-way binding (`@bind-Value`) where the component supports it.
+
+## Fire-and-forget async
+
+When a background task must be started without awaiting it, use **`SafeFireAndForget`** from the **AsyncAwaitBestPractices** package.
+
+Rules:
+- **An `onException` handler must always be provided.** Swallowing exceptions silently is not permitted.
+- Prefer logging the exception at a minimum: `ex => logger.LogError(ex, "Background task failed")`.
+- Do not use `async void` outside of Blazor lifecycle event handlers (e.g., `OnInitializedAsync`) where it is unavoidable.
+
+```csharp
+// ✅ Correct — exception handler is always supplied
+DoWorkAsync().SafeFireAndForget(onException: ex => logger.LogError(ex, "Background task failed"));
+
+// ❌ Wrong — silent discard, no exception handling
+_ = DoWorkAsync();
+
+// ❌ Wrong — no onException handler provided
+DoWorkAsync().SafeFireAndForget();
+```
 
 ## PR checklist item to add
 Add this checkbox when any user-facing text changed:

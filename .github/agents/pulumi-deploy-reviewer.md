@@ -30,6 +30,7 @@ Activate when a PR modifies any file under `CrohnsDiary.Deploy/` or `.github/wor
 
 ### Destructive operations
 - Explicitly call out any `destroy`, `replace`, or resource deletion in the PR description.
+- **If a database (e.g., Azure Cosmos DB, SQL Database) or storage resource (e.g., Azure Blob Storage, File Share) is replaced or deleted, explicitly state that data will be lost.** This must be visible in the PR description so the author and reviewer can confirm whether a data migration or backup is required before applying.
 - If a destructive operation is unintentional, propose a safe alternative.
 
 ## PR additions required

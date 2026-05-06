@@ -30,22 +30,24 @@ Activate when a PR modifies anything under `CrohnsDiary.App/`, `CrohnsDiary.sln`
    ```bash
    dotnet run --project CrohnsDiary.App
    ```
-5. **Manual browser smoke check** — after the app starts, verify:
+5. **Manual browser smoke check** _(human reviewer only — cannot be automated)_  
+   After the app starts, a human must open a browser and verify:
    - [ ] Home page loads without errors.
    - [ ] Main navigation renders and all core pages open.
    - [ ] No obvious startup or browser console errors.
 
 ## PR checklist items to add
-Add the following checkboxes to every PR description when this agent is active:
+Add the following checkboxes to every PR description when this agent is active.  
+The Coding Agent **marks steps 1–4** after executing them. Steps 5–7 (browser smoke check) **must be verified and checked by a human reviewer** — the Coding Agent cannot open a browser.
 
 ```
-- [ ] `dotnet restore` — completed without errors
-- [ ] `dotnet build --no-restore` — completed without errors
-- [ ] `dotnet test --no-build --verbosity normal` — all tests pass
-- [ ] `dotnet run --project CrohnsDiary.App` — app starts without errors
-- [ ] Home page loads without errors
-- [ ] Main navigation renders and core pages open
-- [ ] No obvious startup or browser console errors
+- [ ] `dotnet restore` — completed without errors        ← Coding Agent
+- [ ] `dotnet build --no-restore` — completed without errors  ← Coding Agent
+- [ ] `dotnet test --no-build --verbosity normal` — all tests pass  ← Coding Agent
+- [ ] `dotnet run --project CrohnsDiary.App` — app starts without errors  ← Coding Agent
+- [ ] Home page loads without errors                     ← Human reviewer
+- [ ] Main navigation renders and core pages open        ← Human reviewer
+- [ ] No obvious startup or browser console errors       ← Human reviewer
 ```
 
 ## Notes
