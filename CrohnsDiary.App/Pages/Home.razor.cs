@@ -47,9 +47,9 @@ public partial class Home
     // Blood Pressure fields
     private DateTime? BloodPressureDate { get; set; } = DateTime.Now;
     private TimeSpan? BloodPressureTime { get; set; } = DateTime.Now.TimeOfDay;
-    private int Systolic { get; set; } = 120;
-    private int Diastolic { get; set; } = 80;
-    private int PulseRate { get; set; } = 70;
+    private int? Systolic { get; set; }
+    private int? Diastolic { get; set; }
+    private int? PulseRate { get; set; }
     
     // Custom metrics
     private List<CustomMetric> CustomMetrics { get; set; } = new();
@@ -122,6 +122,18 @@ public partial class Home
 
     private async Task OnSaveBloodPressure()
     {
+        if (!Systolic.HasValue || !Diastolic.HasValue)
+        {
+            Snackbar.Add(Loc["BloodPressureRequired"], Severity.Error);
+            return;
+        }
+
+        if (Systolic.Value <= Diastolic.Value)
+        {
+            Snackbar.Add(Loc["SystolicMustBeGreaterThanDiastolic"], Severity.Error);
+            return;
+        }
+
         var timestamp = BloodPressureDate.GetValueOrDefault(DateTime.Now).Date
             .Add(BloodPressureTime.GetValueOrDefault(DateTime.Now.TimeOfDay));
         var entry = new BloodPressureEntry

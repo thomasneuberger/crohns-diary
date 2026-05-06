@@ -132,4 +132,10 @@
   <data name="BloodPressureSection" xml:space="preserve">
     <value>Blutdruckmessung</value>
   </data>
+  <data name="BloodPressureRequired" xml:space="preserve">
+    <value>Oberer und unterer Blutdruckwert sind erforderlich.</value>
+  </data>
+  <data name="SystolicMustBeGreaterThanDiastolic" xml:space="preserve">
+    <value>Der obere Wert muss größer als der untere Wert sein.</value>
+  </data>
 </root>
