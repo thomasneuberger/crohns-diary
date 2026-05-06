@@ -1,0 +1,29 @@
+## Description
+<!-- Briefly describe the change and the motivation behind it. -->
+
+## Checklist
+
+### Build & Test
+- [ ] `dotnet restore` — completed without errors
+- [ ] `dotnet build --no-restore` — completed without errors
+- [ ] `dotnet test --no-build --verbosity normal` — all tests pass
+
+### Run & Smoke Check
+- [ ] `dotnet run --project CrohnsDiary.App` — app starts without errors
+- [ ] Home page loads without errors
+- [ ] Main navigation renders and core pages open
+- [ ] No obvious startup or browser console errors
+
+### Localization _(if user-facing text changed)_
+- [ ] Default resource file (`*.resx`) updated
+- [ ] German translation file (`*.de.resx`) updated
+
+### Deployment / Infra _(if `CrohnsDiary.Deploy/` or `CD.yml` touched)_
+- [ ] Affected Azure resources described above
+- [ ] No unintended destructive operations (replacements/deletions)
+- [ ] Stack names, env vars, and credentials in `CD.yml` remain consistent
+
+### Dependencies _(if NuGet packages added or updated)_
+- [ ] New packages are MIT licensed
+- [ ] Using newest stable version
+- [ ] Fire-and-forget async uses `AsyncAwaitBestPractices` if applicable
