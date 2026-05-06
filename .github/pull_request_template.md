@@ -10,9 +10,9 @@
 
 ### Run & Smoke Check
 - [ ] `dotnet run --project CrohnsDiary.App` — app starts without errors _(automated by Coding Agent)_
-- [ ] Home page loads without errors _(manual — human reviewer)_
-- [ ] Main navigation renders and core pages open _(manual — human reviewer)_
-- [ ] No obvious startup or browser console errors _(manual — human reviewer)_
+- [ ] Home page loads without errors _(Coding Agent with Playwright MCP, or manual — human reviewer)_
+- [ ] Main navigation renders and core pages open _(Coding Agent with Playwright MCP, or manual — human reviewer)_
+- [ ] No obvious startup or browser console errors _(Coding Agent with Playwright MCP, or manual — human reviewer)_
 
 ### Localization _(if user-facing text changed)_
 - [ ] Default resource file (`*.resx`) updated
