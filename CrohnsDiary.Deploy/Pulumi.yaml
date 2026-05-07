@@ -4,5 +4,4 @@ description: A diary for Crohn stuff
 config:
   pulumi:tags:
     value:
-      pulumi:template: static-website-azure-csharp
-  path: ../CrohnsDiary.App/publish/wwwroot
+      pulumi:template: azure-static-web-app-csharp
