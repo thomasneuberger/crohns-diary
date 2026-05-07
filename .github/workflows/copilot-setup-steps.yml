@@ -1,0 +1,27 @@
+name: "Copilot Setup Steps"
+
+on:
+    workflow_dispatch:
+
+jobs:
+    copilot-setup-steps:
+        runs-on: ubuntu-latest
+
+        permissions:
+            contents: read
+
+        steps:
+            - name: Remove stale Playwright MCP browser lock
+              run: sudo rm -f /root/.cache/ms-playwright/mcp-chrome/SingletonLock
+              continue-on-error: true
+
+            - name: Set up .NET
+              uses: actions/setup-dotnet@v5
+              with:
+                  dotnet-version: "8.0.x"
+
+            - name: Checkout code
+              uses: actions/checkout@v6
+
+            - name: Restore dependencies
+              run: dotnet restore
