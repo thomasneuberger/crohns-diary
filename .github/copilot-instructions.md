@@ -27,15 +27,45 @@ dotnet test --no-build --verbosity normal
 ```
 
 ### Start the application
+Run the app in the background using `nohup` so it persists across separate shell calls:
 ```bash
-dotnet run --project CrohnsDiary.App
+nohup dotnet run --project CrohnsDiary.App --urls "http://localhost:5270" > /tmp/app.log 2>&1 &
+echo "APP_PID=$!"
+```
+
+Then wait for startup and confirm it is listening before proceeding:
+```bash
+sleep 20 && cat /tmp/app.log && curl -s -o /dev/null -w "HTTP %{http_code}" http://localhost:5270
+```
+The app is ready when the log shows `Now listening on: http://localhost:5270` and the curl returns `HTTP 200`.
+
+After the smoke check, stop the process to free the port:
+```bash
+kill $APP_PID 2>/dev/null || true
 ```
 
 ### Manual browser smoke check
-After starting the app, confirm the following:
-- [ ] Home page loads without errors.
+After starting the app, confirm the following via `curl` and, if the Playwright MCP browser is available, via interactive browser checks:
+
+**HTTP checks (always required):**
+```bash
+base="http://localhost:5270"
+for path in "/" "/diary" "/settings" "/about"; do
+  echo "$path -> $(curl -s -o /dev/null -w '%{http_code}' "$base$path")"
+done
+for asset in "/_framework/blazor.webassembly.js" "/_framework/blazor.boot.json" \
+             "/_content/MudBlazor/MudBlazor.min.css" "/scripts/lib/dexie.min.js" \
+             "/manifest.webmanifest" "/favicon.png"; do
+  echo "$asset -> $(curl -s -o /dev/null -w '%{http_code}' "$base$asset")"
+done
+```
+All paths and assets must return HTTP 200.
+
+**Interactive browser checks (when Playwright MCP is available):**
+- [ ] Home page loads and renders without errors (use `browser_navigate` + `browser_snapshot`).
 - [ ] Main navigation renders and all core pages open.
 - [ ] No obvious startup or browser console errors blocking normal use.
+- [ ] Key forms (e.g. diary entry) can be filled out and submitted successfully.
 
 ---
 
