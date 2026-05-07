@@ -34,13 +34,16 @@ return await Deployment.RunAsync(async () =>
     //   Local:   pulumi config set --secret CrohnsDiary:repositoryToken <github-pat>
     //            pulumi config set CrohnsDiary:repositoryUrl https://github.com/owner/repo
     //            pulumi config set CrohnsDiary:branch main
-    //   CI:      GITHUB_TOKEN / GITHUB_REPOSITORY / GITHUB_REF_NAME are injected by the workflow.
+    //   CI:      GITHUB_TOKEN env var must be set to a GitHub PAT with 'repo' scope whose
+    //            owner has admin access to the repository. Store the PAT as a REPOSITORY_TOKEN
+    //            repository secret and the CD workflow forwards it as GITHUB_TOKEN to Pulumi.
+    //            GITHUB_REPOSITORY / GITHUB_REF_NAME are injected automatically by the workflow.
     var config = new Config();
     var repositoryUrl = config.Get("repositoryUrl")
         ?? BuildGitHubRepositoryUrl();
     var repositoryToken = config.Get("repositoryToken")
         ?? Environment.GetEnvironmentVariable("GITHUB_TOKEN")
-        ?? throw new InvalidOperationException("Set 'repositoryToken' in Pulumi config (pulumi config set --secret CrohnsDiary:repositoryToken <token>) or ensure GITHUB_TOKEN env var is set.");
+        ?? throw new InvalidOperationException("Set 'repositoryToken' in Pulumi config (pulumi config set --secret CrohnsDiary:repositoryToken <token>) or set the GITHUB_TOKEN env var to a GitHub PAT with 'repo' scope and admin access to the repository.");
     var branch = config.Get("branch")
         ?? Environment.GetEnvironmentVariable("GITHUB_REF_NAME")
         ?? "main";
