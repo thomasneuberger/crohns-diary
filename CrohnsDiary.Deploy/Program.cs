@@ -25,17 +25,29 @@ return await Deployment.RunAsync(async () =>
 
     var staticWebAppName = $"stapp-crohns-diary-{stack}";
 
-    // The Free SKU requires a linked repository. We provide the repository details and set
+    // The Free SKU requires a linked repository at creation time. We set
     // SkipGithubActionWorkflowGeneration = true so Azure does not generate its own workflow
     // files — our CD workflow handles deployments via the static-web-apps-deploy action.
-    var githubRepository = Environment.GetEnvironmentVariable("GITHUB_REPOSITORY")
-        ?? throw new InvalidOperationException("GITHUB_REPOSITORY environment variable is not set.");
-    var repositoryUrl = $"https://github.com/{githubRepository}";
-    var repositoryToken = Environment.GetEnvironmentVariable("GITHUB_TOKEN")
-        ?? throw new InvalidOperationException("GITHUB_TOKEN environment variable is not set. Ensure it is passed to the Pulumi deploy step.");
-    var branch = Environment.GetEnvironmentVariable("GITHUB_REF_NAME") ?? "main";
+    //
+    // Pulumi config is checked first (for local deployments); GitHub Actions env vars are
+    // used as a fallback when running in CI.
+    //   Local:   pulumi config set --secret CrohnsDiary:repositoryToken <github-pat>
+    //            pulumi config set CrohnsDiary:repositoryUrl https://github.com/owner/repo
+    //            pulumi config set CrohnsDiary:branch main
+    //   CI:      GITHUB_TOKEN / GITHUB_REPOSITORY / GITHUB_REF_NAME are injected by the workflow.
+    var config = new Config();
+    var repositoryUrl = config.Get("repositoryUrl")
+        ?? BuildGitHubRepositoryUrl();
+    var repositoryToken = config.Get("repositoryToken")
+        ?? Environment.GetEnvironmentVariable("GITHUB_TOKEN")
+        ?? throw new InvalidOperationException("Set 'repositoryToken' in Pulumi config (pulumi config set --secret CrohnsDiary:repositoryToken <token>) or ensure GITHUB_TOKEN env var is set.");
+    var branch = config.Get("branch")
+        ?? Environment.GetEnvironmentVariable("GITHUB_REF_NAME")
+        ?? "main";
 
     // Create an Azure Static Web App.
+    // RepositoryToken is only needed to satisfy the Free SKU create-time requirement;
+    // IgnoreChanges prevents Pulumi from diffing/updating it on subsequent runs.
     var staticSite = new AzureNative.Web.StaticSite(staticWebAppName, new()
     {
         Name = staticWebAppName,
@@ -54,6 +66,9 @@ return await Deployment.RunAsync(async () =>
             SkipGithubActionWorkflowGeneration = true,
         },
         Tags = tags
+    }, new CustomResourceOptions
+    {
+        IgnoreChanges = { "repositoryToken" },
     });
 
     await WriteOutputVariable("RESOURCE_GROUP_NAME", resourceGroupName);
@@ -74,4 +89,11 @@ async Task WriteOutputVariable(string name, string value)
     {
         await File.AppendAllLinesAsync(path, [$"{name}={value}"]);
     }
+}
+
+string BuildGitHubRepositoryUrl()
+{
+    var repo = Environment.GetEnvironmentVariable("GITHUB_REPOSITORY")
+        ?? throw new InvalidOperationException("Set 'repositoryUrl' in Pulumi config or ensure GITHUB_REPOSITORY env var is set.");
+    return $"https://github.com/{repo}";
 }
