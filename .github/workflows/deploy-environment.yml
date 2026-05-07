@@ -60,7 +60,6 @@ jobs:
           cloud-url: azblob://stacks?storage_account=stnbgpulumi
           stack-name: ${{ inputs.stack-name }}
           refresh: true
-          config-map: "{ path: { value: '../app/wwwroot'} }"
         env:
           ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
           ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
@@ -76,15 +75,26 @@ jobs:
         with:
           creds: '{ "clientSecret":  "${{ secrets.AZURE_CLIENT_SECRET }}", "subscriptionId":  "${{ secrets.AZURE_SUBSCRIPTION_ID }}", "tenantId":  "${{ secrets.AZURE_TENANT_ID }}", "clientId":  "${{ secrets.AZURE_CLIENT_ID }}" }'
 
-      - name: Purge CDN cache
+      - name: Get Static Web App deployment token
+        id: static-web-app-secrets
         uses: azure/cli@v3
         with:
           inlineScript: |
-            echo "Purge CDN cache in resource group $RESOURCE_GROUP..."
-            echo "Endpoint: $ENDPOINT_NAME"
-            echo "Profile: $PROFILE_NAME"
-            az cdn endpoint purge -g $RESOURCE_GROUP -n $ENDPOINT_NAME --profile-name $PROFILE_NAME --no-wait --content-paths '/*'
+            token=$(az staticwebapp secrets list --name "$STATIC_WEB_APP_NAME" --resource-group "$RESOURCE_GROUP" --query properties.apiKey -o tsv)
+            if [ -z "$token" ]; then
+              echo "Failed to retrieve Static Web App deployment token." >&2
+              exit 1
+            fi
+            echo "::add-mask::$token"
+            echo "deployment_token=$token" >> "$GITHUB_OUTPUT"
         env:
           RESOURCE_GROUP: ${{ steps.deploy.outputs.RESOURCE_GROUP_NAME }}
-          ENDPOINT_NAME: ${{ steps.deploy.outputs.ENDPOINT_NAME }}
-          PROFILE_NAME: ${{ steps.deploy.outputs.PROFILE_NAME }}
+          STATIC_WEB_APP_NAME: ${{ steps.deploy.outputs.STATIC_WEB_APP_NAME }}
+
+      - name: Deploy app content to Static Web App
+        uses: Azure/static-web-apps-deploy@4d27395796ac319302594769cfe812bd207490b1
+        with:
+          azure_static_web_apps_api_token: ${{ steps.static-web-app-secrets.outputs.deployment_token }}
+          action: upload
+          app_location: ./app/wwwroot
+          skip_app_build: true

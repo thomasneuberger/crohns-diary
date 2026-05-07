@@ -6,16 +6,9 @@ using Pulumi;
 using Pulumi.AzureNative.Resources;
 using AzureNative = Pulumi.AzureNative;
 using Deployment = Pulumi.Deployment;
-using SyncedFolder = Pulumi.SyncedFolder;
 
 return await Deployment.RunAsync(async () =>
 {
-    // Import the program's configuration settings.
-    var config = new Config();
-    var path = config.Get("path") ?? "./www";
-    var indexDocument = config.Get("indexDocument") ?? "index.html";
-    var errorDocument = config.Get("errorDocument") ?? "index.html";
-
     var stack = Deployment.Instance.StackName;
     var tags = new InputMap<string>();
     tags.Add("Stack", stack);
@@ -30,104 +23,30 @@ return await Deployment.RunAsync(async () =>
         Tags = tags
     });
 
-    // Create a blob storage account.
-    var account = new AzureNative.Storage.StorageAccount($"stnbgcrohnd{stack}", new()
+    var staticWebAppName = $"stapp-crohns-diary-{stack}";
+
+    // Create an Azure Static Web App.
+    var staticSite = new AzureNative.Web.StaticSite(staticWebAppName, new()
     {
-        AccountName = $"stnbgcrohnd{stack}",
+        Name = staticWebAppName,
         ResourceGroupName = resourceGroup.Name,
-        Kind = "StorageV2",
-        Sku = new AzureNative.Storage.Inputs.SkuArgs
+        Location = "westeurope",
+        Sku = new AzureNative.Web.Inputs.SkuDescriptionArgs
         {
-            Name = "Standard_LRS",
-        },
-        Tags = tags
-    });
-
-    // Configure the storage account as a website.
-    var website = new AzureNative.Storage.StorageAccountStaticWebsite($"website-nbg-crohns-diary-{stack}", new()
-    {
-        ResourceGroupName = resourceGroup.Name,
-        AccountName = account.Name,
-        IndexDocument = indexDocument,
-        Error404Document = errorDocument,
-    });
-
-    // Use a synced folder to manage the files of the website.
-    var syncedFolder = new SyncedFolder.AzureBlobFolder("synced-folder", new()
-    {
-        Path = path,
-        ResourceGroupName = resourceGroup.Name,
-        StorageAccountName = account.Name,
-        ContainerName = website.ContainerName,
-    });
-
-    var profileName = $"profile-nbg-crohns-diary-{stack}";
-
-    // Create a CDN profile.
-    // IgnoreChanges on "sku" because Azure does not allow updating the SKU of an existing profile.
-    // Note: IgnoreChanges uses Pulumi camelCase property path names, not C# property names,
-    // so "sku" (not nameof(ProfileArgs.Sku)) is the correct value here.
-    var profile = new AzureNative.Cdn.Profile($"profile-nbg-crohns-diary-{stack}", new()
-    {
-        ProfileName = profileName,
-        ResourceGroupName = resourceGroup.Name,
-        Sku = new AzureNative.Cdn.Inputs.SkuArgs
-        {
-            Name = "Standard_Microsoft",
-        },
-        Tags = tags
-    }, new CustomResourceOptions
-    {
-        IgnoreChanges = { "sku" }
-    });
-
-    // Pull the hostname out of the storage-account endpoint.
-    var originHostname = account.PrimaryEndpoints.Apply(endpoints => new Uri(endpoints.Web).Host);
-
-    var endpointName = $"endpoint-nbg-crohns-diary-{stack}";
-
-    // Create a CDN endpoint to distribute and cache the website.
-    var endpoint = new AzureNative.Cdn.Endpoint($"endpoint-nbg-crohns-diary-{stack}", new()
-    {
-        EndpointName = endpointName,
-        ResourceGroupName = resourceGroup.Name,
-        ProfileName = profile.Name,
-        IsHttpAllowed = false,
-        IsHttpsAllowed = true,
-        IsCompressionEnabled = true,
-        ContentTypesToCompress = new[]
-        {
-            "text/html",
-            "text/css",
-            "application/javascript",
-            "application/json",
-            "image/svg+xml",
-            "font/woff",
-            "font/woff2",
-        },
-        OriginHostHeader = originHostname,
-        Origins = new[]
-        {
-            new AzureNative.Cdn.Inputs.DeepCreatedOriginArgs
-            {
-                Name = account.Name,
-                HostName = originHostname,
-            },
+            Name = "Free",
+            Tier = "Free",
         },
         Tags = tags
     });
 
     await WriteOutputVariable("RESOURCE_GROUP_NAME", resourceGroupName);
-    await WriteOutputVariable("ENDPOINT_NAME", endpointName);
-    await WriteOutputVariable("PROFILE_NAME", profileName);
+    await WriteOutputVariable("STATIC_WEB_APP_NAME", staticWebAppName);
 
-    // Export the URLs and hostnames of the storage account and CDN.
+    // Export the URL and hostname of the static web app.
     return new Dictionary<string, object?>
     {
-        ["originURL"] = account.PrimaryEndpoints.Apply(primaryEndpoints => primaryEndpoints.Web),
-        ["originHostname"] = originHostname,
-        ["cdnURL"] = endpoint.HostName.Apply(hostName => $"https://{hostName}"),
-        ["cdnHostname"] = endpoint.HostName,
+        ["staticWebAppURL"] = staticSite.DefaultHostname.Apply(hostName => $"https://{hostName}"),
+        ["staticWebAppHostname"] = staticSite.DefaultHostname,
     };
 });
 
