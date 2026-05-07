@@ -1,0 +1,91 @@
+name: Deploy to Environment
+
+on:
+  workflow_call:
+    inputs:
+      stack-name:
+        description: 'Pulumi stack name to deploy (e.g. dev, prod)'
+        required: true
+        type: string
+      environment:
+        description: 'GitHub environment name (e.g. development, production)'
+        required: true
+        type: string
+    secrets:
+      AZURE_CLIENT_ID:
+        required: true
+      AZURE_CLIENT_SECRET:
+        required: true
+      AZURE_TENANT_ID:
+        required: true
+      AZURE_SUBSCRIPTION_ID:
+        required: true
+      AZURE_STORAGE_ACCOUNT:
+        required: true
+      AZURE_STORAGE_KEY:
+        required: true
+      PULUMI_CONFIG_PASSPHRASE:
+        required: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 8.0.x
+      - uses: actions/download-artifact@v8
+        with:
+          name: Deployment
+          path: ./deploy
+      - name: Restore dependencies
+        run: dotnet restore ./deploy/CrohnsDiary.Deploy.csproj
+      - name: Build
+        run: dotnet build ./deploy/CrohnsDiary.Deploy.csproj -c Release --no-restore
+
+      - name: Download App
+        uses: actions/download-artifact@v8
+        with:
+          name: App
+          path: ./app
+
+      - name: Deploy Azure Resources
+        uses: pulumi/actions@v6
+        id: deploy
+        with:
+          command: up
+          work-dir: ./deploy
+          cloud-url: azblob://stacks?storage_account=stnbgpulumi
+          stack-name: ${{ inputs.stack-name }}
+          refresh: true
+          config-map: "{ path: { value: '../app/wwwroot'} }"
+        env:
+          ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+          ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          ARM_LOCATION_NAME: westeurope
+          AZURE_STORAGE_ACCOUNT: ${{ secrets.AZURE_STORAGE_ACCOUNT }}
+          AZURE_STORAGE_KEY: ${{ secrets.AZURE_STORAGE_KEY }}
+          PULUMI_CONFIG_PASSPHRASE: ${{ secrets.PULUMI_CONFIG_PASSPHRASE }}
+
+      - name: Azure login
+        uses: azure/login@v3
+        with:
+          creds: '{ "clientSecret":  "${{ secrets.AZURE_CLIENT_SECRET }}", "subscriptionId":  "${{ secrets.AZURE_SUBSCRIPTION_ID }}", "tenantId":  "${{ secrets.AZURE_TENANT_ID }}", "clientId":  "${{ secrets.AZURE_CLIENT_ID }}" }'
+
+      - name: Purge CDN cache
+        uses: azure/cli@v3
+        with:
+          azcliversion: latest
+          inlineScript: |
+            echo "Purge CDN cache in resource group $RESOURCE_GROUP..."
+            echo "Endpoint: $ENDPOINT_NAME"
+            echo "Profile: $PROFILE_NAME"
+            az cdn endpoint purge -g $RESOURCE_GROUP -n $ENDPOINT_NAME --profile-name $PROFILE_NAME --no-wait --content-paths '/*'
+        env:
+          RESOURCE_GROUP: ${{ steps.deploy.outputs.RESOURCE_GROUP_NAME }}
+          ENDPOINT_NAME: ${{ steps.deploy.outputs.ENDPOINT_NAME }}
+          PROFILE_NAME: ${{ steps.deploy.outputs.PROFILE_NAME }}

@@ -64,6 +64,9 @@ return await Deployment.RunAsync(async () =>
     var profileName = $"profile-nbg-crohns-diary-{stack}";
 
     // Create a CDN profile.
+    // IgnoreChanges on "sku" because Azure does not allow updating the SKU of an existing profile.
+    // Note: IgnoreChanges uses Pulumi camelCase property path names, not C# property names,
+    // so "sku" (not nameof(ProfileArgs.Sku)) is the correct value here.
     var profile = new AzureNative.Cdn.Profile($"profile-nbg-crohns-diary-{stack}", new()
     {
         ProfileName = profileName,
@@ -73,6 +76,9 @@ return await Deployment.RunAsync(async () =>
             Name = "Standard_Microsoft",
         },
         Tags = tags
+    }, new CustomResourceOptions
+    {
+        IgnoreChanges = { "sku" }
     });
 
     // Pull the hostname out of the storage-account endpoint.
