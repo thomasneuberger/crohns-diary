@@ -1,0 +1,32 @@
+name: "Copilot Setup Steps"
+
+on:
+    workflow_dispatch:
+    push:
+        paths:
+            - .github/workflows/copilot-setup-steps.yml
+    pull_request:
+        paths:
+            - .github/workflows/copilot-setup-steps.yml
+
+jobs:
+    copilot-setup-steps:
+        runs-on: ubuntu-latest
+
+        permissions:
+            contents: read
+
+        steps:
+            - name: Remove stale Playwright MCP browser lock
+              run: rm -f /root/.cache/ms-playwright/mcp-chrome/SingletonLock
+
+            - name: Set up .NET
+              uses: actions/setup-dotnet@v4
+              with:
+                  dotnet-version: "8.0.x"
+
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Restore dependencies
+              run: dotnet restore
