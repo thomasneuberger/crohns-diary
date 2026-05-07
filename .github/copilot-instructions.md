@@ -63,9 +63,8 @@ All paths and assets must return HTTP 200.
 
 **Interactive browser checks (when Playwright MCP is available):**
 
-> **Note:** The Playwright MCP browser is a shared resource. If you receive an error like _"use --isolated to run multiple instances of the same browser"_, the browser is already in use by another process and you cannot fix this from within the agent. In that case, skip the interactive checks and rely solely on the HTTP checks above — they are sufficient to confirm the app is serving correctly.
+The Playwright MCP server is configured with `--isolated`, so each agent session gets its own browser context and concurrent sessions do not conflict.
 
-When the browser is free:
 - [ ] Home page loads and renders without errors (use `browser_navigate` + `browser_snapshot`).
 - [ ] Main navigation renders and all core pages open.
 - [ ] No obvious startup or browser console errors blocking normal use.
