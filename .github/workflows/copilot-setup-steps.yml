@@ -12,15 +12,16 @@ jobs:
 
         steps:
             - name: Remove stale Playwright MCP browser lock
-              run: rm -f /root/.cache/ms-playwright/mcp-chrome/SingletonLock
+              run: sudo rm -f /root/.cache/ms-playwright/mcp-chrome/SingletonLock
+              continue-on-error: true
 
             - name: Set up .NET
-              uses: actions/setup-dotnet@v4
+              uses: actions/setup-dotnet@v5
               with:
                   dotnet-version: "8.0.x"
 
             - name: Checkout code
-              uses: actions/checkout@v4
+              uses: actions/checkout@v6
 
             - name: Restore dependencies
               run: dotnet restore
