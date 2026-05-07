@@ -79,7 +79,6 @@ jobs:
       - name: Purge CDN cache
         uses: azure/cli@v3
         with:
-          azcliversion: latest
           inlineScript: |
             echo "Purge CDN cache in resource group $RESOURCE_GROUP..."
             echo "Endpoint: $ENDPOINT_NAME"
