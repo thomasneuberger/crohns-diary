@@ -26,6 +26,9 @@ on:
         required: true
       PULUMI_CONFIG_PASSPHRASE:
         required: true
+      REPOSITORY_TOKEN:
+        description: 'GitHub PAT with repo scope and admin access, used as RepositoryToken for Azure Static Web App creation'
+        required: true
 
 jobs:
   deploy:
@@ -69,7 +72,7 @@ jobs:
           AZURE_STORAGE_ACCOUNT: ${{ secrets.AZURE_STORAGE_ACCOUNT }}
           AZURE_STORAGE_KEY: ${{ secrets.AZURE_STORAGE_KEY }}
           PULUMI_CONFIG_PASSPHRASE: ${{ secrets.PULUMI_CONFIG_PASSPHRASE }}
-          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ secrets.REPOSITORY_TOKEN }}
 
       - name: Azure login
         uses: azure/login@v3
