@@ -25,6 +25,16 @@ return await Deployment.RunAsync(async () =>
 
     var staticWebAppName = $"stapp-crohns-diary-{stack}";
 
+    // The Free SKU requires a linked repository. We provide the repository details and set
+    // SkipGithubActionWorkflowGeneration = true so Azure does not generate its own workflow
+    // files — our CD workflow handles deployments via the static-web-apps-deploy action.
+    var githubRepository = Environment.GetEnvironmentVariable("GITHUB_REPOSITORY")
+        ?? throw new InvalidOperationException("GITHUB_REPOSITORY environment variable is not set.");
+    var repositoryUrl = $"https://github.com/{githubRepository}";
+    var repositoryToken = Environment.GetEnvironmentVariable("GITHUB_TOKEN")
+        ?? throw new InvalidOperationException("GITHUB_TOKEN environment variable is not set. Ensure it is passed to the Pulumi deploy step.");
+    var branch = Environment.GetEnvironmentVariable("GITHUB_REF_NAME") ?? "main";
+
     // Create an Azure Static Web App.
     var staticSite = new AzureNative.Web.StaticSite(staticWebAppName, new()
     {
@@ -35,6 +45,13 @@ return await Deployment.RunAsync(async () =>
         {
             Name = "Free",
             Tier = "Free",
+        },
+        RepositoryUrl = repositoryUrl,
+        RepositoryToken = repositoryToken,
+        Branch = branch,
+        BuildProperties = new AzureNative.Web.Inputs.StaticSiteBuildPropertiesArgs
+        {
+            SkipGithubActionWorkflowGeneration = true,
         },
         Tags = tags
     });
