@@ -36,7 +36,7 @@ Activate when:
 - `CI.yml` builds and tests the .NET 8 solution.
 - `CD.yml` runs a Pulumi deployment to Azure.
 - There is **no Docker build** in either workflow.
-- The app is Blazor WebAssembly; the deploy target is Azure Static Web Apps / CDN via Pulumi.
+- The app is Blazor WebAssembly; the deploy target is an **Azure Storage Static Website** with an **Azure CDN** profile/endpoint, provisioned via Pulumi.
 
 ## Output format
 Provide:

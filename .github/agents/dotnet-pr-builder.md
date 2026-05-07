@@ -78,9 +78,9 @@ A repository administrator must add the following JSON to **Settings → Copilot
 
 ### What the Coding Agent should do when Playwright MCP is available
 
-After `dotnet run` starts the app (default port `5000` / `5001`), use the Playwright MCP tools to:
+After `dotnet run` starts the app, read the URL from the `dotnet run` console output (look for `Now listening on: http://...`). The default profile uses `http://localhost:5270` (see `CrohnsDiary.App/Properties/launchSettings.json`). Use the Playwright MCP tools to:
 
-1. Navigate to `http://localhost:5000` and confirm the home page renders without errors.
+1. Navigate to the URL printed by `dotnet run` (typically `http://localhost:5270`) and confirm the home page renders without errors.
 2. Click through each item in the main navigation and confirm each page opens.
 3. Check `browser_console_messages` for any errors blocking normal use.
 
