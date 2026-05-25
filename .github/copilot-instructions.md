@@ -1,7 +1,7 @@
 # Copilot Instructions for crohns-diary
 
 ## Project Overview
-- `CrohnsDiary.sln` — .NET 8 solution for a Crohn's disease tracking app.
+- `CrohnsDiary.sln` — .NET 10 solution for a Crohn's disease tracking app.
 - `CrohnsDiary.App/` — main Blazor WebAssembly application.
 - `CrohnsDiary.Deploy/` — Pulumi-based Azure deployment infrastructure.
 - UI pages and components: `CrohnsDiary.App/Pages/` and `CrohnsDiary.App/Layout/`.
@@ -76,7 +76,7 @@ The Playwright MCP server is configured with `--isolated`, so each agent session
 
 ### Code style
 - Prefer small, focused changes that match existing C# and Razor conventions.
-- Keep changes compatible with .NET 8 and the current solution structure.
+- Keep changes compatible with .NET 10 and the current solution structure.
 - Avoid drive-by refactors or formatting churn unless explicitly requested.
 
 ### Localization
