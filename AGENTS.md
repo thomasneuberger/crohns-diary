@@ -1,7 +1,7 @@
 # Crohn's Diary Agent Instructions
 
 ## Project Overview
-- `CrohnsDiary.sln` contains a .NET 8 solution for a Crohn's disease tracking app.
+- `CrohnsDiary.sln` contains a .NET 10 solution for a Crohn's disease tracking app.
 - `CrohnsDiary.App/` is the main Blazor application.
 - `CrohnsDiary.Deploy/` contains Pulumi-based deployment infrastructure.
 - UI pages and components are in `CrohnsDiary.App/Pages/` and `CrohnsDiary.App/Layout/`.
@@ -11,7 +11,7 @@
 ## Working Conventions For AI Agents
 - Prefer small, focused changes that match existing C# and Razor conventions.
 - Preserve localization patterns (`*.resx`, `*.de.resx`) when changing user-facing text.
-- Keep changes compatible with .NET 8 and current solution structure.
+- Keep changes compatible with .NET 10 and current solution structure.
 
 ## Pull Request Requirement
 - For every pull request, the application must be built, tested, started, and smoke-checked in the browser before merge.
