@@ -25,10 +25,18 @@ async function onInstall(event) {
         .filter(asset => !offlineAssetsExclude.some(pattern => pattern.test(asset.url)))
         .map(asset => new Request(asset.url, { integrity: asset.hash, cache: 'no-cache' }));
     await caches.open(cacheName).then(cache => cache.addAll(assetsRequests));
+
+    // Activate the new service worker immediately instead of waiting for all
+    // existing tabs to be closed first.
+    await self.skipWaiting();
 }
 
 async function onActivate(event) {
     console.info('Service worker: Activate');
+
+    // Take control of all open clients immediately so they get the updated app
+    // without needing to reload manually.
+    await clients.claim();
 
     // Delete unused caches
     const cacheKeys = await caches.keys();
