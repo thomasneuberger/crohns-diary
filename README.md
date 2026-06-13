@@ -16,21 +16,10 @@ The `scripts/` directory contains helper scripts that run restore/build/test and
 - **`scripts/smoke.sh`** — Linux / macOS (`bash scripts/smoke.sh`)
 - **`scripts/smoke.ps1`** — Windows / PowerShell (`pwsh scripts/smoke.ps1`)
 
-## Vendored JavaScript asset (Dexie)
+## Local data persistence
 
-The app loads Dexie from a checked-in static file at `CrohnsDiary.App/wwwroot/scripts/lib/dexie.min.js`.
-This repository intentionally does not use an npm postinstall copy step for Dexie.
-
-To update Dexie:
-
-1. Download the desired `dexie.min.js` release file from the official Dexie package/release source.
-2. Replace `CrohnsDiary.App/wwwroot/scripts/lib/dexie.min.js`.
-3. Run local validation:
-   - `dotnet restore`
-   - `dotnet build --no-restore`
-   - `dotnet test --no-build --verbosity normal`
-4. Smoke-check the script is served:
-   - `curl -s -o /dev/null -w "%{http_code}" http://localhost:5270/scripts/lib/dexie.min.js`
+Application entries are persisted in browser IndexedDB through the app's C# data layer in `CrohnsDiary.App/Database`.
+No JavaScript database library is required for diary entry persistence.
 
 ## Azure deployment (Static Web App)
 
