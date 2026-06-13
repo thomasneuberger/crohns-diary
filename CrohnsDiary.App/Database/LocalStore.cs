@@ -8,9 +8,8 @@ public class LocalStore<TItem, TKey>(IJSRuntime jsRuntime, string databaseName, 
 {
     private const string ScriptNamespace = "crohnsDiaryIndexedDb";
 
-    public async Task Add(TItem item, TKey key)
+    public async Task Add(TItem item)
     {
-        var _ = key;
         await jsRuntime.InvokeVoidAsync($"{ScriptNamespace}.add", databaseName, storeName, item);
     }
 
