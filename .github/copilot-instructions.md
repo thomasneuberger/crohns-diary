@@ -54,7 +54,7 @@ for path in "/" "/diary" "/settings" "/about"; do
   echo "$path -> $(curl -s -o /dev/null -w '%{http_code}' "$base$path")"
 done
 for asset in "/_framework/blazor.webassembly.js" "/_framework/dotnet.js" \
-             "/_content/MudBlazor/MudBlazor.min.css" "/scripts/lib/dexie.min.js" \
+             "/_content/MudBlazor/MudBlazor.min.css" \
              "/manifest.webmanifest" "/favicon.png"; do
   echo "$asset -> $(curl -s -o /dev/null -w '%{http_code}' "$base$asset")"
 done

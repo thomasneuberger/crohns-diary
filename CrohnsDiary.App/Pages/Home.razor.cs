@@ -116,7 +116,7 @@ public partial class Home
             }
         }
         
-        await Database.Entries.Add(entry, entry.Id);
+        await Database.Entries.Add(entry);
         Snackbar.Add(Loc["Saved"], Severity.Success);
     }
 
@@ -144,7 +144,7 @@ public partial class Home
             Diastolic = Diastolic,
             PulseRate = PulseRate
         };
-        await Database.BloodPressureEntries.Add(entry, entry.Id);
+        await Database.BloodPressureEntries.Add(entry);
         Snackbar.Add(Loc["Saved"], Severity.Success);
     }
 }

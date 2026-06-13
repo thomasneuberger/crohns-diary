@@ -13,15 +13,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="package.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="package.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="BlazorDexie" Version="2.2.0" />
     <PackageReference Include="Blazored.LocalStorage" Version="4.5.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="10.0.8" PrivateAssets="all" />

@@ -16,6 +16,11 @@ The `scripts/` directory contains helper scripts that run restore/build/test and
 - **`scripts/smoke.sh`** — Linux / macOS (`bash scripts/smoke.sh`)
 - **`scripts/smoke.ps1`** — Windows / PowerShell (`pwsh scripts/smoke.ps1`)
 
+## Local data persistence
+
+Application entries are persisted in browser IndexedDB through the app's C# data layer in `CrohnsDiary.App/Database`.
+No JavaScript database library is required for diary entry persistence.
+
 ## Azure deployment (Static Web App)
 
 Deployment now uses **Azure Static Web Apps**. Pulumi provisions the Static Web App resource and GitHub Actions uploads the published `wwwroot` content.
