@@ -16,12 +16,12 @@ jobs:
               continue-on-error: true
 
             - name: Set up .NET
-              uses: actions/setup-dotnet@v5
+              uses: actions/setup-dotnet@v6
               with:
                   dotnet-version: "10.0.x"
 
             - name: Checkout code
-              uses: actions/checkout@v6
+              uses: actions/checkout@v7
 
             - name: Restore dependencies
               run: dotnet restore
