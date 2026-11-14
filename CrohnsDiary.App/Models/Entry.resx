@@ -132,4 +132,31 @@
   <data name="Air" xml:space="preserve">
     <value>Air</value>
   </data>
+  <data name="BristolStoolForm" xml:space="preserve">
+    <value>Bristol stool form</value>
+  </data>
+  <data name="BristolType" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="BristolType1Description" xml:space="preserve">
+    <value>Separate hard lumps, like nuts; difficult to pass</value>
+  </data>
+  <data name="BristolType2Description" xml:space="preserve">
+    <value>Sausage-shaped but lumpy</value>
+  </data>
+  <data name="BristolType3Description" xml:space="preserve">
+    <value>Like a sausage with cracks on the surface</value>
+  </data>
+  <data name="BristolType4Description" xml:space="preserve">
+    <value>Like a sausage or snake, smooth and soft</value>
+  </data>
+  <data name="BristolType5Description" xml:space="preserve">
+    <value>Soft blobs with clear-cut edges</value>
+  </data>
+  <data name="BristolType6Description" xml:space="preserve">
+    <value>Fluffy pieces with ragged edges; mushy</value>
+  </data>
+  <data name="BristolType7Description" xml:space="preserve">
+    <value>Watery, with no solid pieces</value>
+  </data>
 </root>

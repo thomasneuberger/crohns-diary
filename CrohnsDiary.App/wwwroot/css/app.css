@@ -101,3 +101,22 @@ a, .btn-link {
 code {
     color: #c02d76;
 }
+
+.bristol-form-option {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    white-space: normal;
+}
+
+.bristol-form-option img {
+    flex: 0 0 90px;
+    width: 90px;
+    height: 48px;
+}
+
+.bristol-form-select .mud-select-input .mud-input-slot {
+    height: auto;
+    min-height: 48px;
+    overflow: visible;
+}

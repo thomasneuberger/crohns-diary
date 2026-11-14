@@ -33,6 +33,7 @@
                         <PropertyColumn Property="e => e.Effort" Title="@LocEntry["Effort"]"></PropertyColumn>
                         <PropertyColumn Property="e => e.Urgency" Title="@LocEntry["Urgency"]"></PropertyColumn>
                         <PropertyColumn Property="e => e.Air" Title="@LocEntry["Air"]"></PropertyColumn>
+                        <PropertyColumn Property="e => e.BristolStoolForm" Title="@LocEntry["BristolStoolForm"]"></PropertyColumn>
                         @foreach (var metric in CustomMetrics.Where(m => m.IsEnabled))
                         {
                             var metricId = metric.Id;

@@ -32,6 +32,8 @@ public partial class Home
 
     private bool ShowAir { get; set; }
 
+    private bool ShowBristolStoolForm { get; set; }
+
     private int Consistency { get; set; } = 3;
 
     private int Amount { get; set; } = 3;
@@ -41,6 +43,10 @@ public partial class Home
     public int Urgency { get; set; } = 3;
 
     private int Air { get; set; } = 0;
+
+    private int? BristolStoolForm { get; set; }
+
+    private static readonly int[] BristolStoolFormTypes = [1, 2, 3, 4, 5, 6, 7];
 
     private TimeSpan? SelectedTime { get; set; } = DateTime.Now.TimeOfDay;
 
@@ -63,6 +69,7 @@ public partial class Home
         ShowEffort = await SettingsDatabase.GetBoolValue(ISettingsDatabase.ShowEffort, true);
         ShowUrgency = await SettingsDatabase.GetBoolValue(ISettingsDatabase.ShowUrgency, true);
         ShowAir = await SettingsDatabase.GetBoolValue(ISettingsDatabase.ShowAir, false);
+        ShowBristolStoolForm = await SettingsDatabase.GetBoolValue(ISettingsDatabase.ShowBristolStoolForm, true);
         
         CustomMetrics = await SettingsDatabase.GetValue<List<CustomMetric>>(ISettingsDatabase.CustomMetrics) ?? new List<CustomMetric>();
         
@@ -92,7 +99,8 @@ public partial class Home
             Amount = ShowAmount ? Amount : null,
             Effort = ShowEffort ? Effort : null,
             Urgency = ShowUrgency ? Urgency : null,
-            Air = ShowAir ? Air : null
+            Air = ShowAir ? Air : null,
+            BristolStoolForm = ShowBristolStoolForm ? BristolStoolForm : null
         };
         
         // Add custom metric values

@@ -132,6 +132,9 @@
   <data name="ShowAir" xml:space="preserve">
     <value>Luft anzeigen</value>
   </data>
+  <data name="ShowBristolStoolForm" xml:space="preserve">
+    <value>Bristol-Stuhlformen-Skala anzeigen</value>
+  </data>
   <data name="BuiltInMetrics" xml:space="preserve">
     <value>Eingebaute Metriken</value>
   </data>

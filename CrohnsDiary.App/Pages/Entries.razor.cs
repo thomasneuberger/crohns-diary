@@ -66,6 +66,7 @@ public partial class Entries
                 Effort = entry.Effort,
                 Urgency = entry.Urgency,
                 Air = entry.Air,
+                BristolStoolForm = entry.BristolStoolForm,
                 CustomMetricValues = entry.CustomMetricValues
             });
         }
@@ -114,6 +115,7 @@ public partial class Entries
         public int? Effort { get; set; }
         public int? Urgency { get; set; }
         public int? Air { get; set; }
+        public int? BristolStoolForm { get; set; }
         
         // Blood pressure fields
         public int? Systolic { get; set; }

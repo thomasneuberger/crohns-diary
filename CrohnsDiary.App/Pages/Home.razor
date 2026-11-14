@@ -54,6 +54,25 @@
             </div>
         </div>
     }
+    @if (ShowBristolStoolForm)
+    {
+        <div class="row mt-3">
+            <div class="col-12 col-sm-3"><label>@LocEntry["BristolStoolForm"]</label></div>
+            <div class="col-12 col-sm-9">
+                <MudSelect T="int?" @bind-Value="BristolStoolForm" Clearable="true" Label="@LocEntry["BristolStoolForm"]" Class="bristol-form-select">
+                    @foreach (var type in BristolStoolFormTypes)
+                    {
+                        <MudSelectItem T="int?" Value="@((int?)type)">
+                            <div class="bristol-form-option">
+                                <img src="@($"/images/bristol/type-{type}.svg")" alt="" />
+                                <span><strong>@LocEntry["BristolType"] @type</strong><br />@LocEntry[$"BristolType{type}Description"]</span>
+                            </div>
+                        </MudSelectItem>
+                    }
+                </MudSelect>
+            </div>
+        </div>
+    }
     
     @foreach (var metric in CustomMetrics.Where(m => m.IsEnabled))
     {
@@ -123,4 +142,3 @@
         </div>
     </div>
 </div>
-

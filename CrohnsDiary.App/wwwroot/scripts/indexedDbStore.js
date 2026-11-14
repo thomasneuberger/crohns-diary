@@ -1,4 +1,33 @@
 (function () {
+    function normalizeItemForStore(item, keyPath) {
+        if (typeof keyPath !== "string") {
+            return item;
+        }
+
+        var camelCaseKey = keyPath.charAt(0).toLowerCase() + keyPath.slice(1);
+        if (item[keyPath] === undefined && item[camelCaseKey] !== undefined) {
+            item = Object.assign({}, item);
+            item[keyPath] = item[camelCaseKey];
+            delete item[camelCaseKey];
+        }
+
+        return item;
+    }
+
+    function normalizeItemFromStore(item, keyPath) {
+        if (typeof keyPath !== "string") {
+            return item;
+        }
+
+        var camelCaseKey = keyPath.charAt(0).toLowerCase() + keyPath.slice(1);
+        if (item[keyPath] !== undefined && item[camelCaseKey] === undefined) {
+            item[camelCaseKey] = item[keyPath];
+            delete item[keyPath];
+        }
+
+        return item;
+    }
+
     function openDatabase(databaseName, storeName) {
         return new Promise(function (resolve, reject) {
             var request = indexedDB.open(databaseName);
@@ -81,7 +110,7 @@
     window.crohnsDiaryIndexedDb = {
         add: function (databaseName, storeName, item) {
             return runReadWrite(databaseName, storeName, function (store, reject) {
-                var request = store.add(item);
+                var request = store.add(normalizeItemForStore(item, store.keyPath));
                 request.onerror = function (event) {
                     reject(event.target.error || new Error("Failed to add item."));
                 };
@@ -91,7 +120,7 @@
         bulkPut: function (databaseName, storeName, items) {
             return runReadWrite(databaseName, storeName, function (store, reject) {
                 (items || []).forEach(function (item) {
-                    var request = store.put(item);
+                    var request = store.put(normalizeItemForStore(item, store.keyPath));
                     request.onerror = function (event) {
                         reject(event.target.error || new Error("Failed to write item."));
                     };
@@ -103,7 +132,9 @@
             return runReadOnly(databaseName, storeName, function (store, resolve, reject) {
                 var request = store.getAll();
                 request.onsuccess = function () {
-                    resolve(request.result || []);
+                    resolve((request.result || []).map(function (item) {
+                        return normalizeItemFromStore(item, store.keyPath);
+                    }));
                 };
                 request.onerror = function (event) {
                     reject(event.target.error || new Error("Failed to read items."));
