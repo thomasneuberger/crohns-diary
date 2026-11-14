@@ -59,7 +59,7 @@
         <div class="row mt-3">
             <div class="col-12 col-sm-3"><label>@LocEntry["BristolStoolForm"]</label></div>
             <div class="col-12 col-sm-9">
-                <MudSelect T="int?" @bind-Value="BristolStoolForm" Clearable="true" Class="bristol-form-select">
+                <MudSelect T="int?" @bind-Value="BristolStoolForm" Clearable="true" Label="@LocEntry["BristolStoolForm"]" Class="bristol-form-select">
                     @foreach (var type in BristolStoolFormTypes)
                     {
                         <MudSelectItem T="int?" Value="@((int?)type)">
