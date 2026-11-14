@@ -132,4 +132,31 @@
   <data name="Air" xml:space="preserve">
     <value>Luft</value>
   </data>
+  <data name="BristolStoolForm" xml:space="preserve">
+    <value>Bristol-Stuhlformen-Skala</value>
+  </data>
+  <data name="BristolType" xml:space="preserve">
+    <value>Typ</value>
+  </data>
+  <data name="BristolType1Description" xml:space="preserve">
+    <value>Einzelne harte Kügelchen, schwer auszuscheiden</value>
+  </data>
+  <data name="BristolType2Description" xml:space="preserve">
+    <value>Wurstförmig, aber klumpig</value>
+  </data>
+  <data name="BristolType3Description" xml:space="preserve">
+    <value>Wurstförmig mit Rissen an der Oberfläche</value>
+  </data>
+  <data name="BristolType4Description" xml:space="preserve">
+    <value>Wurst- oder schlangenförmig, glatt und weich</value>
+  </data>
+  <data name="BristolType5Description" xml:space="preserve">
+    <value>Weiche, klar abgegrenzte Klümpchen</value>
+  </data>
+  <data name="BristolType6Description" xml:space="preserve">
+    <value>Flockige Stücke mit ausgefransten Rändern, breiig</value>
+  </data>
+  <data name="BristolType7Description" xml:space="preserve">
+    <value>Wässrig, ohne feste Bestandteile</value>
+  </data>
 </root>

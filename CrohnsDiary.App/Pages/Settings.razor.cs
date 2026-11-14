@@ -13,6 +13,7 @@ public partial class Settings
     private bool _showEffort;
     private bool _showUrgency;
     private bool _showAir;
+    private bool _showBristolStoolForm;
 
     [Inject]
     public required IStringLocalizer<Settings> Loc { get; set; }
@@ -42,6 +43,7 @@ public partial class Settings
         _showEffort = await SettingsDatabase.GetBoolValue(ISettingsDatabase.ShowEffort, true);
         _showUrgency = await SettingsDatabase.GetBoolValue(ISettingsDatabase.ShowUrgency, true);
         _showAir = await SettingsDatabase.GetBoolValue(ISettingsDatabase.ShowAir, false);
+        _showBristolStoolForm = await SettingsDatabase.GetBoolValue(ISettingsDatabase.ShowBristolStoolForm, true);
         
         CustomMetrics = await SettingsDatabase.GetValue<List<CustomMetric>>(ISettingsDatabase.CustomMetrics) ?? new List<CustomMetric>();
     }
@@ -93,6 +95,16 @@ public partial class Settings
         {
             _showAir = value;
             Task.Run(() => SettingsDatabase.SaveValue(ISettingsDatabase.ShowAir, value));
+        }
+    }
+
+    public bool ShowBristolStoolForm
+    {
+        get => _showBristolStoolForm;
+        set
+        {
+            _showBristolStoolForm = value;
+            Task.Run(() => SettingsDatabase.SaveValue(ISettingsDatabase.ShowBristolStoolForm, value));
         }
     }
     

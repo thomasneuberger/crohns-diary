@@ -15,5 +15,7 @@ public class Entry
 
     public int? Air { get; set; }
 
+    public int? BristolStoolForm { get; set; }
+
     public List<CustomMetricValue> CustomMetricValues { get; set; } = new();
 }

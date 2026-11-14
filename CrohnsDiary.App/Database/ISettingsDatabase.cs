@@ -12,6 +12,8 @@ public interface ISettingsDatabase
 
     public const string ShowAir = nameof(ShowAir);
 
+    public const string ShowBristolStoolForm = nameof(ShowBristolStoolForm);
+
     public const string CustomMetrics = nameof(CustomMetrics);
 
     Task SaveValue<T>(string key, T value);
