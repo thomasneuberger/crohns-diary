@@ -114,3 +114,9 @@ code {
     width: 90px;
     height: 48px;
 }
+
+.bristol-form-select .mud-select-input .mud-input-slot {
+    height: auto;
+    min-height: 48px;
+    overflow: visible;
+}
